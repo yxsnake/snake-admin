@@ -1,0 +1,1 @@
+package com.snake.admin.mapper.tenant;

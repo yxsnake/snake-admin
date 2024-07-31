@@ -1,0 +1,20 @@
+package com.snake.admin.controller.system;
+
+import com.snake.admin.service.system.SysDeptEntityService;
+import io.github.yxsnake.pisces.web.core.framework.controller.BaseController;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Tag(name = "运营平台-部门")
+@Slf4j
+@RestController
+@RequestMapping(value = "/sys-dept",produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequiredArgsConstructor
+public class SysDeptController extends BaseController {
+
+    private final SysDeptEntityService sysDeptEntityService;
+}
