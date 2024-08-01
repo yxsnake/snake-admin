@@ -51,7 +51,7 @@
     </appender>
 
 
-    <springProfile name="local,dev">
+    <springProfile name="local,dev,test">
         <root level="INFO">
             <appender-ref ref="ASYNC_FILE"/>
             <appender-ref ref="STDOUT"/>
