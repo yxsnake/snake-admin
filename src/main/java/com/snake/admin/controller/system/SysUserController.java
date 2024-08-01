@@ -1,13 +1,24 @@
 package com.snake.admin.controller.system;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.snake.admin.model.system.dto.SysUserDTO;
+import com.snake.admin.model.system.equal.QuerySysUserEqual;
+import com.snake.admin.model.system.form.CreateSysUserForm;
+import com.snake.admin.model.system.form.ModifySysUserForm;
+import com.snake.admin.model.system.form.UpdateSysUserStatusForm;
+import com.snake.admin.model.system.fuzzy.QuerySysUserFuzzy;
 import com.snake.admin.service.system.SysUserEntityService;
+import io.github.yxsnake.pisces.web.core.base.QueryFilter;
+import io.github.yxsnake.pisces.web.core.base.Result;
 import io.github.yxsnake.pisces.web.core.framework.controller.BaseController;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "运营平台-用户")
 @Slf4j
@@ -17,4 +28,38 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysUserController extends BaseController {
 
     private final SysUserEntityService sysUserEntityService;
+
+    @Operation(summary = "创建用户")
+    @PostMapping(value = "/create")
+    public ResponseEntity<Result<Boolean>> create(@Validated @RequestBody CreateSysUserForm form){
+        sysUserEntityService.create(form);
+        return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "修改用户")
+    @PostMapping(value = "/modify")
+    public ResponseEntity<Result<Boolean>> modify(@Validated @RequestBody ModifySysUserForm form){
+        sysUserEntityService.modify(form);
+        return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "查询用户信息")
+    @GetMapping(value = "/detail/{id}")
+    public ResponseEntity<Result<SysUserDTO>> detail(@PathVariable("id") String id){
+        return success(sysUserEntityService.detail(id));
+    }
+
+    @Operation(summary = "修改用户状态")
+    @PostMapping(value = "/update-status")
+    public ResponseEntity<Result<Boolean>> updateStatus(@Validated @RequestBody UpdateSysUserStatusForm form){
+        sysUserEntityService.upateStatus(form);
+        return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "分页查询用户列表")
+    @PostMapping(value = "/page-list")
+    public ResponseEntity<Result<IPage<SysUserDTO>>> pageList(@RequestBody QueryFilter<QuerySysUserEqual, QuerySysUserFuzzy> queryFilter){
+        return success(sysUserEntityService.pageList(queryFilter));
+    }
+
 }

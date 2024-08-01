@@ -11,7 +11,6 @@ import com.snake.admin.model.system.entity.SysDeptEntity;
 import com.snake.admin.model.system.form.CreateSysDeptForm;
 import com.snake.admin.model.system.form.ModifySysDeptForm;
 import com.snake.admin.service.system.SysDeptEntityService;
-import com.snake.admin.service.system.SysUserDeptEntityService;
 import io.github.yxsnake.pisces.web.core.utils.BizAssert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

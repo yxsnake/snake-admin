@@ -11,6 +11,8 @@ import lombok.Data;
 @TableName(value = "sys_user")
 public class SysUserEntity extends BaseEntity implements Convert {
 
+    public final static String DEFAULT_AVATAR = "https://avatars.githubusercontent.com/u/4476132";
+
     @TableId(type = IdType.NONE)
     private String id;
 
@@ -31,5 +33,7 @@ public class SysUserEntity extends BaseEntity implements Convert {
     private Integer sex;
 
     private Integer status;
+
+    private String deptId;
 
 }

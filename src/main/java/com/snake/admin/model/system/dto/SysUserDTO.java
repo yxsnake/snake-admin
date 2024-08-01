@@ -33,4 +33,7 @@ public class SysUserDTO {
 
     @Schema(description = "账号状态")
     private Integer status;
+
+    @Schema(description = "部门ID")
+    private String deptId;
 }

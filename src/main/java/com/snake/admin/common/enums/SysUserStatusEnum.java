@@ -1,5 +1,6 @@
 package com.snake.admin.common.enums;
 
+import io.github.yxsnake.pisces.web.core.base.IBaseEnum;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -7,11 +8,11 @@ import java.util.Arrays;
 /**
  * @author: snake
  * @create-time: 2024-08-01
- * @description: 系统部门状态
+ * @description: 系统用户状态
  * @version: 1.0
  */
 @Getter
-public enum SysDeptStatusEnum {
+public enum SysUserStatusEnum implements IBaseEnum<Integer> {
 
     NORMAL(1,"正常"),
 
@@ -23,12 +24,12 @@ public enum SysDeptStatusEnum {
 
     private final String label;
 
-    SysDeptStatusEnum(final Integer value,final String label){
+    SysUserStatusEnum(final Integer value, final String label){
         this.value = value;
         this.label = label;
     }
 
-    public static SysDeptStatusEnum getInstance(final Integer value){
+    public static SysUserStatusEnum getInstance(final Integer value){
         return Arrays.asList(values()).stream().filter(item->item.getValue().equals(value)).findFirst().orElse(null);
     }
 }
