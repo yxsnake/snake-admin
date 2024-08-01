@@ -3,11 +3,14 @@ package com.snake.admin.service.system.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.snake.admin.common.enums.SysDeptStatusEnum;
 import com.snake.admin.mapper.system.SysDeptEntityMapper;
+import com.snake.admin.mapper.system.SysUserEntityMapper;
 import com.snake.admin.model.system.dto.SysDeptDTO;
 import com.snake.admin.model.system.entity.SysDeptEntity;
+import com.snake.admin.model.system.entity.SysUserEntity;
 import com.snake.admin.model.system.form.CreateSysDeptForm;
 import com.snake.admin.model.system.form.ModifySysDeptForm;
 import com.snake.admin.service.system.SysDeptEntityService;
@@ -25,7 +28,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SysDeptEntityServiceImpl extends ServiceImpl<SysDeptEntityMapper, SysDeptEntity> implements SysDeptEntityService {
 
-    private final SysUserDeptEntityService sysUserDeptEntityService;
+    private final SysUserEntityMapper sysUserEntityMapper;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void create(CreateSysDeptForm form) {
@@ -81,7 +84,10 @@ public class SysDeptEntityServiceImpl extends ServiceImpl<SysDeptEntityMapper, S
         SysDeptEntity sysDeptEntity = this.getBaseMapper().selectById(id);
         BizAssert.isTrue("部门不存在", Objects.isNull(sysDeptEntity));
         //校验部门是否已关联用户
-        Boolean existDeptBindUser = sysUserDeptEntityService.existsUser(id);
+        Boolean existDeptBindUser = sysUserEntityMapper.selectCount(
+                Wrappers.lambdaQuery(SysUserEntity.class)
+                        .eq(SysUserEntity::getDeptId,id)
+        )>0;
         BizAssert.isTrue("当前部门下存在用户，不允许删除",existDeptBindUser);
         this.getBaseMapper().deleteById(id);
     }
