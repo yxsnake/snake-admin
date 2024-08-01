@@ -26,6 +26,7 @@
         <swagger-core.version>2.2.20</swagger-core.version>
         <springdoc-openapi-starter-webmvc-api.version>2.2.0</springdoc-openapi-starter-webmvc-api.version>
         <jackson-module-jakarta-xmlbind-annotations.version>2.13.3</jackson-module-jakarta-xmlbind-annotations.version>
+        <bcprov-jdk15to18.version>1.69</bcprov-jdk15to18.version>
     </properties>
 
     <dependencies>
@@ -77,6 +78,12 @@
             <artifactId>jaxb-api</artifactId>
             <version>${jaxb-api.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15to18</artifactId>
+            <version>${bcprov-jdk15to18.version}</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
