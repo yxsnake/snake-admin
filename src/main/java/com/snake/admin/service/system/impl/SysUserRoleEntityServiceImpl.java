@@ -12,4 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityMapper, SysUserRoleEntity> implements SysUserRoleEntityService {
+    @Override
+    public Boolean existRoleBindUser(String id) {
+        return this.lambdaQuery()
+                .eq(SysUserRoleEntity::getRoleId,id)
+                .list().stream().count()>0;
+    }
 }

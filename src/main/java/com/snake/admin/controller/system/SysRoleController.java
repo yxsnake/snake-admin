@@ -44,8 +44,8 @@ public class SysRoleController extends BaseController {
     }
 
     @Operation(summary = "查询角色")
-    @GetMapping(value = "/detail")
-    public ResponseEntity<Result<SysRoleDTO>> detail(@RequestParam String id){
+    @GetMapping(value = "/detail/{id}")
+    public ResponseEntity<Result<SysRoleDTO>> detail(@PathVariable("id") String id){
         return success(sysRoleEntityService.detail(id));
     }
 
