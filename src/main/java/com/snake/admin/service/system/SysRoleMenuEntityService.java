@@ -10,4 +10,10 @@ import com.snake.admin.model.system.entity.SysRoleMenuEntity;
  * @version: 1.0
  */
 public interface SysRoleMenuEntityService extends IService<SysRoleMenuEntity> {
+    /**
+     * 查询 当前菜单是否已关联角色
+     * @param menuId 菜单ID
+     * @return
+     */
+    Boolean existMenuBindRole(String menuId);
 }

@@ -18,4 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SysRoleMenuEntityServiceImpl extends ServiceImpl<SysRoleMenuEntityMapper, SysRoleMenuEntity> implements SysRoleMenuEntityService {
+    @Override
+    public Boolean existMenuBindRole(String id) {
+        return this.lambdaQuery().eq(SysRoleMenuEntity::getMenuId,id).list().stream().count()>0;
+    }
 }

@@ -7,32 +7,21 @@ import io.github.yxsnake.pisces.web.core.base.BaseEntity;
 import io.github.yxsnake.pisces.web.core.converter.Convert;
 import lombok.Data;
 
-
+/**
+ * @author: snake
+ * @create-time: 2024-08-01
+ * @description:
+ * @version: 1.0
+ */
 @Data
-@TableName(value = "sys_dept")
-public class SysDeptEntity extends BaseEntity implements Convert {
-
-    public final static String ROOT = "0";
+@TableName(value = "sys_user_dept")
+public class SysUserDeptEntity extends BaseEntity implements Convert {
 
     @TableId(type = IdType.NONE)
     private String id;
 
-    private String parentId;
+    private String userId;
 
-    private String name;
-
-    private String phone;
-
-    private String principal;
-
-    private String email;
-
-    private Integer type;
-
-    private Integer status;
-
-    private String remark;
-
-    private Long sort;
+    private String deptId;
 
 }

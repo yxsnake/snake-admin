@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snake.admin.mapper.system.SysMenuEntityMapper">
+
+    <select id="selectMenuListByUserId" resultType="com.snake.admin.model.system.entity.SysMenuEntity">
+        SELECT
+            t1.*
+        FROM
+            sys_menu t1,
+            sys_role_menu t2,
+            sys_role t3,
+            sys_user_role t4,
+            sys_user t5
+        WHERE
+            t1.id = t2.menu_id
+          AND t2.role_id = t3.id
+          AND t3.id = t4.role_id
+          AND t4.user_id = t5.id
+          AND t5.id = #{userId}
+    </select>
+</mapper>

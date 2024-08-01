@@ -1,13 +1,21 @@
 package com.snake.admin.controller.system;
 
+import com.snake.admin.model.system.dto.SysMenuDTO;
+import com.snake.admin.model.system.form.CreateSysMenuForm;
+import com.snake.admin.model.system.form.ModifySysMenuForm;
 import com.snake.admin.service.system.SysMenuEntityService;
+import io.github.yxsnake.pisces.web.core.base.Result;
 import io.github.yxsnake.pisces.web.core.framework.controller.BaseController;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "运营平台-菜单")
 @Slf4j
@@ -17,4 +25,38 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysMenuController extends BaseController {
 
     private final SysMenuEntityService sysMenuEntityService;
+
+
+    @Operation(summary = "根据用户查询菜单列表")
+    @GetMapping(value = "/list")
+    public ResponseEntity<Result<List<SysMenuDTO>>> list(@PathVariable("userId") String userId){
+        return success(sysMenuEntityService.listByUserId(userId));
+    }
+
+    @Operation(summary = "创建菜单")
+    @PostMapping(value = "/create")
+    public ResponseEntity<Result<Boolean>> create(@Validated @RequestBody CreateSysMenuForm form){
+        sysMenuEntityService.create(form);
+        return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "修改菜单")
+    @PostMapping(value = "/modify")
+    public ResponseEntity<Result<Boolean>> modify(@Validated @RequestBody ModifySysMenuForm form){
+        sysMenuEntityService.modify(form);
+        return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "删除一个菜单")
+    @GetMapping(value = "/delete/{id}")
+    public ResponseEntity<Result<Boolean>> deleteById(@PathVariable("id") String id){
+        sysMenuEntityService.deleteById(id);
+        return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "查询一个菜单")
+    @GetMapping(value = "/detail/{id}")
+    public ResponseEntity<Result<SysMenuDTO>> detail(@PathVariable("id") String id){
+        return success(sysMenuEntityService.detail(id));
+    }
 }
