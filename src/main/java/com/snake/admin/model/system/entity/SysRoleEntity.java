@@ -11,6 +11,8 @@ import lombok.Data;
 @TableName(value = "sys_role")
 public class SysRoleEntity extends BaseEntity implements Convert {
 
+    public final static String ROLE_CODE_ADMIN = "admin";
+
     @TableId(type = IdType.NONE)
     private String id;
 

@@ -83,6 +83,9 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
         // 查询当前角色是否已分配给用户，如果已分配则不允许删除
         Boolean existBindUser = sysUserRoleEntityService.existRoleBindUser(id);
         BizAssert.isTrue("当前角色已绑定用户,不允许删除",existBindUser);
+        SysRoleEntity sysRoleEntity = this.getBaseMapper().selectById(id);
+        BizAssert.isTrue("角色不存在",Objects.isNull(sysRoleEntity));
+        BizAssert.isTrue("管理员角色不允许删除",SysRoleEntity.ROLE_CODE_ADMIN.equals(sysRoleEntity.getCode()));
         this.deleteById(id);
     }
 
