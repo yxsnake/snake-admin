@@ -2,6 +2,7 @@ package com.snake.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.snake.admin.model.system.entity.SysRoleMenuEntity;
+import com.snake.admin.model.system.form.AuthorizedSysRoleMenuForm;
 
 /**
  * @author: snake
@@ -16,4 +17,6 @@ public interface SysRoleMenuEntityService extends IService<SysRoleMenuEntity> {
      * @return
      */
     Boolean existMenuBindRole(String menuId);
+
+    void authorizedMenu(AuthorizedSysRoleMenuForm form);
 }
