@@ -2,6 +2,7 @@ package com.snake.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.snake.admin.model.system.entity.SysUserRoleEntity;
+import com.snake.admin.model.system.form.AuthorizedSysUserRoleForm;
 
 import java.util.Set;
 
@@ -14,4 +15,6 @@ public interface SysUserRoleEntityService extends IService<SysUserRoleEntity> {
     Boolean existRoleBindUser(String id);
 
     Set<String> getCurrentUserRoles(String userId);
+
+    void authorizedRole(AuthorizedSysUserRoleForm form);
 }

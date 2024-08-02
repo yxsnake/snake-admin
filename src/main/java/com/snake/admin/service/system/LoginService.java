@@ -4,12 +4,15 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.snake.admin.common.components.RefreshTokenService;
+import com.snake.admin.common.enums.BusinessResultCode;
 import com.snake.admin.common.enums.SysUserStatusEnum;
 import com.snake.admin.common.security.sm3.SM3Util;
 import com.snake.admin.common.utils.PwdUtil;
 import com.snake.admin.model.system.dto.LoginSysUserDTO;
+import com.snake.admin.model.system.dto.RefreshTokenDTO;
 import com.snake.admin.model.system.entity.SysUserEntity;
 import com.snake.admin.model.system.form.LoginSysUserForm;
+import com.snake.admin.model.system.form.RefreshTokenForm;
 import io.github.yxsnake.pisces.web.core.utils.BizAssert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +62,7 @@ public class LoginService {
         }
 
         // 生成刷新token
-        String refreshToken = RefreshTokenService.generateRefreshToken();
+        String refreshToken = refreshTokenService.generateRefreshToken();
         refreshTokenService.setRefreshToken(refreshToken,userId);
 
         long tokenTimeout = StpUtil.getTokenTimeout() * 1000;
@@ -72,7 +75,30 @@ public class LoginService {
         // 查询当前用的角色标识
         Set<String> roleCodes =  sysUserRoleEntityService.getCurrentUserRoles(userId);
         loginSysUser.setRoles(roleCodes);
-
+        loginSysUser.setAvatar(sysUserEntity.getAvatar());
+        loginSysUser.setUsername(sysUserEntity.getUsername());
+        loginSysUser.setName(sysUserEntity.getNickname());
+        loginSysUser.setGender(sysUserEntity.getSex());
+        loginSysUser.setStatus(sysUserEntity.getStatus());
         return loginSysUser;
+    }
+
+    public RefreshTokenDTO refreshToken(RefreshTokenForm form) {
+        RefreshTokenDTO refreshTokenDTO = RefreshTokenDTO.builder().build();
+        String userId = refreshTokenService.getUserId(form.getRefreshToken());
+        BizAssert.isTrue(BusinessResultCode.INVALID_REFRESH_TOKEN, StrUtil.isBlank(userId));
+        refreshTokenService.removeRefreshToken(form.getRefreshToken());
+        StpUtil.login(userId);
+        String accessToken = StpUtil.getTokenValue();
+        long tokenTimeout = StpUtil.getTokenTimeout() * 1000;
+        long expiresNumber = DateUtil.date().getTime() + tokenTimeout;
+
+        String refreshToken = refreshTokenService.generateRefreshToken();
+        refreshTokenService.setRefreshToken(refreshToken,userId);
+
+        refreshTokenDTO.setAccessToken(accessToken);
+        refreshTokenDTO.setRefreshToken(refreshToken);
+        refreshTokenDTO.setExpires(new Date(expiresNumber));
+        return refreshTokenDTO;
     }
 }

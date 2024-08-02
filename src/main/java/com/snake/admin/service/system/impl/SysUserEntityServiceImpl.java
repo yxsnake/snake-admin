@@ -1,5 +1,6 @@
 package com.snake.admin.service.system.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -8,12 +9,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.snake.admin.common.enums.SysDeptStatusEnum;
 import com.snake.admin.common.enums.SysUserStatusEnum;
-import com.snake.admin.common.security.sm3.SM3Util;
 import com.snake.admin.common.utils.PwdUtil;
+import com.snake.admin.mapper.system.SysRoleEntityMapper;
 import com.snake.admin.mapper.system.SysUserEntityMapper;
+import com.snake.admin.mapper.system.SysUserRoleEntityMapper;
+import com.snake.admin.model.system.dto.SysRoleDTO;
 import com.snake.admin.model.system.dto.SysUserDTO;
 import com.snake.admin.model.system.entity.SysDeptEntity;
+import com.snake.admin.model.system.entity.SysRoleEntity;
 import com.snake.admin.model.system.entity.SysUserEntity;
+import com.snake.admin.model.system.entity.SysUserRoleEntity;
 import com.snake.admin.model.system.equal.QuerySysUserEqual;
 import com.snake.admin.model.system.form.CreateSysUserForm;
 import com.snake.admin.model.system.form.ModifySysUserForm;
@@ -29,7 +34,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,6 +44,10 @@ import java.util.Objects;
 public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, SysUserEntity> implements SysUserEntityService {
     
     private final SysDeptEntityService sysDeptEntityService;
+
+    private final SysUserRoleEntityMapper sysUserRoleEntityMapper;
+
+    private final SysRoleEntityMapper sysRoleEntityMapper;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void create(CreateSysUserForm form) {
@@ -58,10 +69,7 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
         userEntity.setId(userId);
         userEntity.setAvatar(SysUserEntity.DEFAULT_AVATAR);
         userEntity.setPassword(ciphertext);
-        SysUserStatusEnum sysUserStatusEnum = SysUserStatusEnum.getInstance(form.getStatus());
-        if(Objects.isNull(sysUserStatusEnum)){
-            userEntity.setStatus(SysUserStatusEnum.NORMAL.getValue());
-        }
+        userEntity.setStatus(SysUserStatusEnum.NORMAL.getValue());
         // 校验 部门是否存在 或者是否已禁用
         SysDeptEntity sysDeptEntity = sysDeptEntityService.getBaseMapper().selectById(deptId);
         BizAssert.isTrue("部门信息不存在", Objects.isNull(sysDeptEntity));
@@ -90,7 +98,16 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
         if(Objects.isNull(sysUserEntity)){
             return null;
         }
-        return sysUserEntity.convert(SysUserDTO.class);
+        SysUserDTO sysUserDTO = sysUserEntity.convert(SysUserDTO.class);
+        List<SysUserRoleEntity> userRoleEntities = sysUserRoleEntityMapper.selectList(Wrappers.lambdaQuery(SysUserRoleEntity.class)
+                .eq(SysUserRoleEntity::getUserId, id));
+        if(CollUtil.isNotEmpty(userRoleEntities)){
+            List<String> roleIds = userRoleEntities.stream().map(SysUserRoleEntity::getRoleId).collect(Collectors.toList());
+            List<SysRoleEntity> sysRoleEntities = sysRoleEntityMapper.selectBatchIds(roleIds);
+            sysUserDTO.setRoleList(sysRoleEntities.stream().map(item->item.convert(SysRoleDTO.class)).collect(Collectors.toList()));
+            sysUserDTO.setRoles(sysRoleEntities.stream().map(SysRoleEntity::getCode).collect(Collectors.toList()));
+        }
+        return sysUserDTO;
     }
 
     @Override
@@ -105,6 +122,7 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
     @Override
     public IPage<SysUserDTO> pageList(QueryFilter<QuerySysUserEqual, QuerySysUserFuzzy> queryFilter) {
         QuerySysUserEqual equalsQueries = QueryFilter.getEqualsQueries(QuerySysUserEqual.class, queryFilter.getEqualsQueries());
+        BizAssert.isTrue("请选择一个部门",StrUtil.isBlank(equalsQueries.getDeptId()));
         QuerySysUserFuzzy fuzzyQueries = QueryFilter.getFuzzyQueries(QuerySysUserFuzzy.class, queryFilter.getFuzzyQueries());
         return this.page(new Page<>(queryFilter.getPageNum(),queryFilter.getPageSize()),
                 Wrappers.lambdaQuery(SysUserEntity.class)

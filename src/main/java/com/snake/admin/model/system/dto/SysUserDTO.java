@@ -3,6 +3,8 @@ package com.snake.admin.model.system.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Schema(name = "用户信息")
 public class SysUserDTO {
@@ -36,4 +38,10 @@ public class SysUserDTO {
 
     @Schema(description = "部门ID")
     private String deptId;
+
+    @Schema(description = "角色详细信息")
+    private List<SysRoleDTO> roleList;
+
+    @Schema(description = "角色标识")
+    private List<String> roles;
 }

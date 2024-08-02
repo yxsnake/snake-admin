@@ -32,6 +32,10 @@ public class SysDeptEntityServiceImpl extends ServiceImpl<SysDeptEntityMapper, S
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void create(CreateSysDeptForm form) {
+        // 校验部门是否已存在
+        SysDeptEntity deptEntity = this.lambdaQuery().eq(SysDeptEntity::getName, form.getName()).list().stream().findFirst().orElse(null);
+        BizAssert.isTrue("名称已存在",Objects.nonNull(deptEntity));
+
         String id = IdWorker.getIdStr();
         String parentId = form.getParentId();
         SysDeptEntity sysDeptEntity = form.convert(SysDeptEntity.class);
@@ -58,6 +62,12 @@ public class SysDeptEntityServiceImpl extends ServiceImpl<SysDeptEntityMapper, S
     @Transactional(rollbackFor = Exception.class)
     public void modify(ModifySysDeptForm form) {
         String id = form.getId();
+
+        SysDeptEntity deptEntity = this.lambdaQuery().eq(SysDeptEntity::getName, form.getName())
+                .ne(SysDeptEntity::getId,id)
+                .list().stream().findFirst().orElse(null);
+        BizAssert.isTrue("名称已存在",Objects.nonNull(deptEntity));
+
         String parentId = form.getParentId();
         SysDeptEntity sysDeptEntity = this.getBaseMapper().selectById(id);
         BizAssert.isTrue("部门信息不存在",Objects.isNull(sysDeptEntity));

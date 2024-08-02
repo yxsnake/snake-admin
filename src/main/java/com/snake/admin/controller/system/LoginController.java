@@ -1,7 +1,10 @@
 package com.snake.admin.controller.system;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.snake.admin.model.system.dto.LoginSysUserDTO;
+import com.snake.admin.model.system.dto.RefreshTokenDTO;
 import com.snake.admin.model.system.form.LoginSysUserForm;
+import com.snake.admin.model.system.form.RefreshTokenForm;
 import com.snake.admin.service.system.LoginService;
 import io.github.yxsnake.pisces.web.core.base.Result;
 import io.github.yxsnake.pisces.web.core.framework.controller.BaseController;
@@ -31,4 +34,18 @@ public class LoginController extends BaseController {
     public ResponseEntity<Result<LoginSysUserDTO>> login(@Validated @RequestBody LoginSysUserForm form){
         return success(loginService.login(form));
     }
+
+    @Operation(summary = "登出")
+    @PostMapping(value = "/logout")
+    public ResponseEntity<Result<Boolean>> logout(){
+        StpUtil.logout(StpUtil.getLoginId());
+        return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "刷新token")
+    @PostMapping(value = "/refresh-token")
+    public ResponseEntity<Result<RefreshTokenDTO>> refreshToken(@RequestBody RefreshTokenForm form){
+        return success(loginService.refreshToken(form));
+    }
+
 }

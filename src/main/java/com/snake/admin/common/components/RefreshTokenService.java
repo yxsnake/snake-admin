@@ -27,7 +27,7 @@ public class RefreshTokenService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public static String generateRefreshToken(){
+    public String generateRefreshToken(){
         // 随机数生成器
         SecureRandom random = new SecureRandom();
 

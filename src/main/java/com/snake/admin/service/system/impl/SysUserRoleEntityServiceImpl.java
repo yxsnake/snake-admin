@@ -1,18 +1,24 @@
 package com.snake.admin.service.system.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.snake.admin.common.enums.SysRoleStatusEnum;
 import com.snake.admin.mapper.system.SysRoleEntityMapper;
 import com.snake.admin.mapper.system.SysUserRoleEntityMapper;
 import com.snake.admin.model.system.entity.SysRoleEntity;
 import com.snake.admin.model.system.entity.SysUserRoleEntity;
+import com.snake.admin.model.system.form.AuthorizedSysUserRoleForm;
 import com.snake.admin.service.system.SysUserRoleEntityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,5 +48,29 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
                         .eq(SysRoleEntity::getStatus, SysRoleStatusEnum.NORMAL.getValue())
                         .in(SysRoleEntity::getId,roleIds)
         ).stream().map(SysRoleEntity::getCode).collect(Collectors.toSet());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void authorizedRole(AuthorizedSysUserRoleForm form) {
+        List<SysUserRoleEntity> list = this.lambdaQuery().eq(SysUserRoleEntity::getUserId, form.getUserId()).list();
+        if(CollUtil.isNotEmpty(list)){
+            this.getBaseMapper().deleteBatchIds(list.stream().map(SysUserRoleEntity::getId).collect(Collectors.toSet()));
+        }
+        // 对前端传递参数进行去重
+        Set<String> roleIds = Sets.newHashSet();
+        roleIds.addAll(form.getRoleIds());
+        // 反向查询角色信息，防止 不存在的角色
+        List<SysRoleEntity> sysRoleEntities = sysRoleEntityMapper.selectBatchIds(roleIds);
+        // 组装 用户角色关联关系对象
+        List<SysUserRoleEntity> userRoleEntities = Lists.newArrayList();
+        sysRoleEntities.stream().forEach(sysRoleEntity -> {
+            SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
+            userRoleEntity.setId(IdWorker.getIdStr());
+            userRoleEntity.setUserId(form.getUserId());
+            userRoleEntity.setRoleId(sysRoleEntity.getId());
+            userRoleEntities.add(userRoleEntity);
+        });
+        this.saveBatch(userRoleEntities);
     }
 }
