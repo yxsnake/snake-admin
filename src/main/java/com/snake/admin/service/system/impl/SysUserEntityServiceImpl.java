@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.snake.admin.common.enums.SysDeptStatusEnum;
 import com.snake.admin.common.enums.SysUserStatusEnum;
+import com.snake.admin.common.security.sm3.SM3Util;
+import com.snake.admin.common.utils.PwdUtil;
 import com.snake.admin.mapper.system.SysUserEntityMapper;
 import com.snake.admin.model.system.dto.SysUserDTO;
 import com.snake.admin.model.system.entity.SysDeptEntity;
@@ -42,6 +44,8 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
         String userId = IdWorker.getIdStr();
         String deptId = form.getDeptId();
         String username = form.getUsername();
+        String password = form.getPassword();
+        String ciphertext = PwdUtil.ciphertext(username,password);
         String phone = form.getPhone();
         // 校验用户名是否已存在
         SysUserEntity sysUserEntity = this.lambdaQuery().eq(SysUserEntity::getUsername, username).list().stream().findFirst().orElse(null);
@@ -53,6 +57,7 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
         }
         userEntity.setId(userId);
         userEntity.setAvatar(SysUserEntity.DEFAULT_AVATAR);
+        userEntity.setPassword(ciphertext);
         SysUserStatusEnum sysUserStatusEnum = SysUserStatusEnum.getInstance(form.getStatus());
         if(Objects.isNull(sysUserStatusEnum)){
             userEntity.setStatus(SysUserStatusEnum.NORMAL.getValue());
