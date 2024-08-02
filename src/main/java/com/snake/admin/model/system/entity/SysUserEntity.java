@@ -13,6 +13,8 @@ public class SysUserEntity extends BaseEntity implements Convert {
 
     public final static String DEFAULT_AVATAR = "https://avatars.githubusercontent.com/u/4476132";
 
+    public final static String SUPPER_ACCOUNT = "admin";
+
     @TableId(type = IdType.NONE)
     private String id;
 

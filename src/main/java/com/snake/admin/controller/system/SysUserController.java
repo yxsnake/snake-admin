@@ -5,6 +5,7 @@ import com.snake.admin.model.system.dto.SysUserDTO;
 import com.snake.admin.model.system.equal.QuerySysUserEqual;
 import com.snake.admin.model.system.form.CreateSysUserForm;
 import com.snake.admin.model.system.form.ModifySysUserForm;
+import com.snake.admin.model.system.form.RestUsrPwdForm;
 import com.snake.admin.model.system.form.UpdateSysUserStatusForm;
 import com.snake.admin.model.system.fuzzy.QuerySysUserFuzzy;
 import com.snake.admin.service.system.SysUserEntityService;
@@ -60,6 +61,13 @@ public class SysUserController extends BaseController {
     @PostMapping(value = "/page-list")
     public ResponseEntity<Result<IPage<SysUserDTO>>> pageList(@RequestBody QueryFilter<QuerySysUserEqual, QuerySysUserFuzzy> queryFilter){
         return success(sysUserEntityService.pageList(queryFilter));
+    }
+
+    @Operation(summary = "重置用户密码")
+    @PostMapping(value = "/rest-password")
+    public ResponseEntity<Result<Boolean>> restPassword(@Validated @RequestBody RestUsrPwdForm form){
+        sysUserEntityService.restPassword(form);
+        return success(Boolean.TRUE);
     }
 
 }

@@ -22,6 +22,7 @@ import com.snake.admin.model.system.entity.SysUserRoleEntity;
 import com.snake.admin.model.system.equal.QuerySysUserEqual;
 import com.snake.admin.model.system.form.CreateSysUserForm;
 import com.snake.admin.model.system.form.ModifySysUserForm;
+import com.snake.admin.model.system.form.RestUsrPwdForm;
 import com.snake.admin.model.system.form.UpdateSysUserStatusForm;
 import com.snake.admin.model.system.fuzzy.QuerySysUserFuzzy;
 import com.snake.admin.service.system.SysDeptEntityService;
@@ -31,6 +32,7 @@ import io.github.yxsnake.pisces.web.core.utils.BizAssert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, SysUserEntity> implements SysUserEntityService {
+
+    @Value("${rest.pwd.safe.code:888888}")
+    private String restPwdSafeCode;
     
     private final SysDeptEntityService sysDeptEntityService;
 
@@ -131,5 +136,17 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
                         .like(StrUtil.isNotBlank(fuzzyQueries.getUsername()),SysUserEntity::getUsername,fuzzyQueries.getUsername())
                         .like(StrUtil.isNotBlank(fuzzyQueries.getPhone()),SysUserEntity::getPhone,fuzzyQueries.getPhone())
         ).convert(item->item.convert(SysUserDTO.class));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void restPassword(RestUsrPwdForm form) {
+        BizAssert.isTrue("口令错误",!restPwdSafeCode.equals(form.getSafeCode()));
+        SysUserEntity sysUserEntity = this.getBaseMapper().selectById(form.getUserId());
+        BizAssert.isTrue("用户不存在",Objects.isNull(sysUserEntity));
+        BizAssert.isTrue("超管账号密码不允许重置",SysUserEntity.SUPPER_ACCOUNT.equals(sysUserEntity.getUsername()));
+        String cipherTexted = PwdUtil.ciphertext(sysUserEntity.getUsername(), sysUserEntity.getUsername());
+        sysUserEntity.setPassword(cipherTexted);
+        this.getBaseMapper().updateById(sysUserEntity);
     }
 }
