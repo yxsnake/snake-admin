@@ -10,6 +10,7 @@ import com.snake.admin.mapper.system.SysDeptEntityMapper;
 import com.snake.admin.mapper.system.SysUserEntityMapper;
 import com.snake.admin.model.system.dto.SysDeptDTO;
 import com.snake.admin.model.system.entity.SysDeptEntity;
+import com.snake.admin.model.system.entity.SysRoleEntity;
 import com.snake.admin.model.system.entity.SysUserEntity;
 import com.snake.admin.model.system.form.CreateSysDeptForm;
 import com.snake.admin.model.system.form.ModifySysDeptForm;
@@ -35,6 +36,10 @@ public class SysDeptEntityServiceImpl extends ServiceImpl<SysDeptEntityMapper, S
         // 校验部门是否已存在
         SysDeptEntity deptEntity = this.lambdaQuery().eq(SysDeptEntity::getName, form.getName()).list().stream().findFirst().orElse(null);
         BizAssert.isTrue("名称已存在",Objects.nonNull(deptEntity));
+
+        // 校验 只允许创建一个顶级部门  就是 公司名称
+        deptEntity = this.lambdaQuery().eq(SysDeptEntity::getParentId,SysDeptEntity.ROOT).list().stream().findFirst().orElse(null);
+        BizAssert.isTrue("已存在顶级部门",Objects.nonNull(deptEntity));
 
         String id = IdWorker.getIdStr();
         String parentId = form.getParentId();
@@ -93,6 +98,8 @@ public class SysDeptEntityServiceImpl extends ServiceImpl<SysDeptEntityMapper, S
     public void deleteById(String id) {
         SysDeptEntity sysDeptEntity = this.getBaseMapper().selectById(id);
         BizAssert.isTrue("部门不存在", Objects.isNull(sysDeptEntity));
+        BizAssert.isTrue("顶级部门不允许删除", SysDeptEntity.ROOT.equals(sysDeptEntity.getParentId()));
+
         //校验部门是否已关联用户
         Boolean existDeptBindUser = sysUserEntityMapper.selectCount(
                 Wrappers.lambdaQuery(SysUserEntity.class)
