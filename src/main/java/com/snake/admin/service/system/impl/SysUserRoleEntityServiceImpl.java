@@ -73,4 +73,27 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
         });
         this.saveBatch(userRoleEntities);
     }
+
+    /**
+     * 当前用户是否包含 超级管理员角色
+     * @param userId
+     * @return
+     */
+    @Override
+    public Boolean containsAdminRole(String userId) {
+        List<String> roleIds = this.lambdaQuery().eq(SysUserRoleEntity::getUserId, userId)
+                .list().stream().map(SysUserRoleEntity::getRoleId).collect(Collectors.toList());
+        if(CollUtil.isEmpty(roleIds)){
+            return Boolean.FALSE;
+        }
+        List<String> roleCodes = sysRoleEntityMapper.selectList(
+                Wrappers.lambdaQuery(SysRoleEntity.class)
+                        .in(SysRoleEntity::getId, roleIds)
+                )
+                .stream().map(SysRoleEntity::getCode).collect(Collectors.toList());
+        if(CollUtil.isEmpty(roleIds)){
+            return Boolean.FALSE;
+        }
+        return roleCodes.contains(SysRoleEntity.ROLE_CODE_ADMIN);
+    }
 }

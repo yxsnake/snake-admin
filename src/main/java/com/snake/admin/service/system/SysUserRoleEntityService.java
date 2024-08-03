@@ -17,4 +17,6 @@ public interface SysUserRoleEntityService extends IService<SysUserRoleEntity> {
     Set<String> getCurrentUserRoles(String userId);
 
     void authorizedRole(AuthorizedSysUserRoleForm form);
+
+    Boolean containsAdminRole(String userId);
 }

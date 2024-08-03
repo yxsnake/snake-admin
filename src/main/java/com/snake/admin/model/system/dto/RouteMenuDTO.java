@@ -2,6 +2,7 @@ package com.snake.admin.model.system.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ import java.util.List;
  * @description:
  * @version: 1.0
  */
+@Data
+@Schema(name = "菜单信息")
 public class RouteMenuDTO {
 
     @Schema(description = "菜单ID")
