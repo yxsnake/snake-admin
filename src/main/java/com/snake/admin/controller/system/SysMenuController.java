@@ -1,5 +1,8 @@
 package com.snake.admin.controller.system;
 
+import cn.dev33.satoken.stp.StpUtil;
+import com.snake.admin.common.Cons;
+import com.snake.admin.model.system.dto.RouteMenuDTO;
 import com.snake.admin.model.system.dto.SysMenuDTO;
 import com.snake.admin.model.system.form.CreateSysMenuForm;
 import com.snake.admin.model.system.form.ModifySysMenuForm;
@@ -28,35 +31,41 @@ public class SysMenuController extends BaseController {
 
 
     @Operation(summary = "根据用户查询菜单列表")
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/list",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<List<SysMenuDTO>>> list(@PathVariable("userId") String userId){
         return success(sysMenuEntityService.listByUserId(userId));
     }
 
     @Operation(summary = "创建菜单")
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> create(@Validated @RequestBody CreateSysMenuForm form){
         sysMenuEntityService.create(form);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "修改菜单")
-    @PostMapping(value = "/modify")
+    @PostMapping(value = "/modify",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> modify(@Validated @RequestBody ModifySysMenuForm form){
         sysMenuEntityService.modify(form);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "删除一个菜单")
-    @GetMapping(value = "/delete/{id}")
+    @GetMapping(value = "/delete/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> deleteById(@PathVariable("id") String id){
         sysMenuEntityService.deleteById(id);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "查询一个菜单")
-    @GetMapping(value = "/detail/{id}")
+    @GetMapping(value = "/detail/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<SysMenuDTO>> detail(@PathVariable("id") String id){
         return success(sysMenuEntityService.detail(id));
+    }
+
+    @Operation(summary = "查询当前用户的菜单按钮权限列表树")
+    @GetMapping(value = "/get/current-user/routes/",headers = Cons.HEADER_AUTHORIZATION)
+    public ResponseEntity<Result<List<RouteMenuDTO>>> getCurrentUserRoutes(){
+        return success(sysMenuEntityService.getCurrentUserRoutes(String.valueOf(StpUtil.getLoginId())));
     }
 }

@@ -1,5 +1,6 @@
 package com.snake.admin.controller.system;
 
+import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.form.AuthorizedSysRoleMenuForm;
 import com.snake.admin.service.system.SysRoleMenuEntityService;
 import io.github.yxsnake.pisces.web.core.base.Result;
@@ -24,7 +25,7 @@ public class SysRoleMenuController extends BaseController {
     private final SysRoleMenuEntityService sysRoleMenuEntityService;
 
     @Operation(summary = "角色授权菜单按钮")
-    @PostMapping(value = "/authorized")
+    @PostMapping(value = "/authorized",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> authorizedMenu(AuthorizedSysRoleMenuForm form){
         sysRoleMenuEntityService.authorizedMenu(form);
         return success(Boolean.TRUE);

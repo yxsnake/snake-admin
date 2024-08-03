@@ -48,7 +48,7 @@ public class LoginService {
         String username = sysUserEntity.getUsername();
         String rawPassword = form.getPassword();
         Boolean verify = PwdUtil.verify(username, rawPassword, sysUserEntity.getPassword());
-        BizAssert.isTrue("密码错误",!verify);
+        BizAssert.isFalse("密码错误",verify);
 
         String userId = sysUserEntity.getId();
         StpUtil.logout(userId);

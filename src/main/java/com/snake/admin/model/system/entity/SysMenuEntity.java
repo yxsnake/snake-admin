@@ -11,6 +11,8 @@ import lombok.Data;
 @TableName(value = "sys_menu")
 public class SysMenuEntity extends BaseEntity implements Convert {
 
+    public final static String ROOT_PARENT = "0";
+
     @TableId(type = IdType.NONE)
     private String id;
 

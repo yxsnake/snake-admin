@@ -9,4 +9,5 @@ package com.snake.admin.common;
 public interface Cons {
 
 
+    String HEADER_AUTHORIZATION = "Authorization";
 }

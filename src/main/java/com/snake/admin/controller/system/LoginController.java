@@ -1,6 +1,7 @@
 package com.snake.admin.controller.system;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.dto.LoginSysUserDTO;
 import com.snake.admin.model.system.dto.RefreshTokenDTO;
 import com.snake.admin.model.system.form.LoginSysUserForm;
@@ -36,7 +37,7 @@ public class LoginController extends BaseController {
     }
 
     @Operation(summary = "登出")
-    @PostMapping(value = "/logout")
+    @PostMapping(value = "/logout",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> logout(){
         StpUtil.logout(StpUtil.getLoginId());
         return success(Boolean.TRUE);

@@ -1,6 +1,7 @@
 package com.snake.admin.controller.system;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.dto.SysRoleDTO;
 import com.snake.admin.model.system.equal.QuerySysRoleEqual;
 import com.snake.admin.model.system.form.CreateSysRoleForm;
@@ -30,40 +31,40 @@ public class SysRoleController extends BaseController {
     private final SysRoleEntityService sysRoleEntityService;
 
     @Operation(summary = "创建角色")
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> create(@Validated @RequestBody CreateSysRoleForm form){
         sysRoleEntityService.create(form);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "修改角色")
-    @PostMapping(value = "/modify")
+    @PostMapping(value = "/modify",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> modify(@Validated @RequestBody ModifySysRoleForm form){
         sysRoleEntityService.modify(form);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "查询角色")
-    @GetMapping(value = "/detail/{id}")
+    @GetMapping(value = "/detail/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<SysRoleDTO>> detail(@PathVariable("id") String id){
         return success(sysRoleEntityService.detail(id));
     }
 
     @Operation(summary = "分页查询角色列表")
-    @PostMapping(value = "/page-list")
+    @PostMapping(value = "/page-list",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<IPage<SysRoleDTO>>> pageList(@RequestBody QueryFilter<QuerySysRoleEqual, QuerySysRoleFuzzy> queryFilter){
         return success(sysRoleEntityService.pageList(queryFilter));
     }
 
     @Operation(summary = "查询角色")
-    @GetMapping(value = "/delete/{id}")
+    @GetMapping(value = "/delete/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> deleteById(@PathVariable("id") String id){
         sysRoleEntityService.deleteById(id);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "更新角色状态")
-    @PostMapping(value = "/update-status")
+    @PostMapping(value = "/update-status",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> updateStatus(@Validated @RequestBody UpdateSysRoleStatusForm form){
         sysRoleEntityService.updateStatus(form);
         return success(Boolean.TRUE);

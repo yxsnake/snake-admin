@@ -1,5 +1,6 @@
 package com.snake.admin.controller.system;
 
+import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.dto.SysDeptDTO;
 import com.snake.admin.model.system.form.CreateSysDeptForm;
 import com.snake.admin.model.system.form.ModifySysDeptForm;
@@ -28,34 +29,34 @@ public class SysDeptController extends BaseController {
     private final SysDeptEntityService sysDeptEntityService;
 
     @Operation(summary = "创建部门")
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> create(@Validated @RequestBody CreateSysDeptForm form){
         sysDeptEntityService.create(form);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "修改部门")
-    @PostMapping(value = "/modify")
+    @PostMapping(value = "/modify",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> modify(@Validated @RequestBody ModifySysDeptForm form){
         sysDeptEntityService.modify(form);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "查询一个部门")
-    @GetMapping(value = "/detail/{id}")
+    @GetMapping(value = "/detail/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<SysDeptDTO>> detail(@PathVariable("id") String id){
         return success(sysDeptEntityService.detail(id));
     }
 
     @Operation(summary = "删除一个部门")
-    @GetMapping(value = "/delete/{id}")
+    @GetMapping(value = "/delete/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> deleteById(@PathVariable("id") String id){
         sysDeptEntityService.deleteById(id);
         return success(Boolean.TRUE);
     }
 
     @Operation(summary = "查询部门列表")
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/list",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<List<SysDeptDTO>>> list(){
         return success(sysDeptEntityService.list()
                 .stream()

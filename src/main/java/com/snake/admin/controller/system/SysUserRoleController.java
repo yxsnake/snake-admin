@@ -1,5 +1,6 @@
 package com.snake.admin.controller.system;
 
+import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.form.AuthorizedSysUserRoleForm;
 import com.snake.admin.service.system.SysUserRoleEntityService;
 import io.github.yxsnake.pisces.web.core.base.Result;
@@ -26,7 +27,7 @@ public class SysUserRoleController extends BaseController {
     private final SysUserRoleEntityService sysUserRoleEntityService;
 
     @Operation(summary = "用户授权角色")
-    @PostMapping(value = "/authorized")
+    @PostMapping(value = "/authorized",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> authorizedRole(@Validated @RequestBody AuthorizedSysUserRoleForm form){
         sysUserRoleEntityService.authorizedRole(form);
         return success(Boolean.TRUE);
