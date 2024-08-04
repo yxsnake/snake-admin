@@ -22,4 +22,6 @@ public interface SysMenuEntityService extends IService<SysMenuEntity> {
     SysMenuDTO detail(String id);
 
     List<RouteMenuDTO> getCurrentUserRoutes(String s);
+
+    List<SysMenuEntity> getCurrentMenuIds(String userId,Boolean containsAdminRole);
 }

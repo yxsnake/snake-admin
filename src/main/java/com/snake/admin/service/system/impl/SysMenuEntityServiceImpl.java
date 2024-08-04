@@ -118,7 +118,7 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         List<RouteMenuDTO> routeMenuList = Lists.newArrayList();
         // 查询 用户的角色标识 是否包含管理员标识
         Boolean containsAdminRole =  sysUserRoleEntityService.containsAdminRole(userId);
-        List<SysMenuEntity> list = getCurrentMenuIds(userId,containsAdminRole);
+        List<SysMenuEntity> list = this.getCurrentMenuIds(userId,containsAdminRole);
         if(CollUtil.isEmpty(list)){
             return routeMenuList;
         }else{
@@ -236,7 +236,7 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         return buttonAllowAuthMap;
     }
 
-    private List<SysMenuEntity> getCurrentMenuIds(String userId,Boolean containsAdminRole){
+    public List<SysMenuEntity> getCurrentMenuIds(String userId,Boolean containsAdminRole){
         if(containsAdminRole){
             // 查询所有菜单
             return this.lambdaQuery().list();

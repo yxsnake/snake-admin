@@ -58,6 +58,7 @@ public class SysDeptController extends BaseController {
     @Operation(summary = "查询部门列表")
     @GetMapping(value = "/list",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<List<SysDeptDTO>>> list(){
+
         return success(sysDeptEntityService.list()
                 .stream()
                 .map(item->item.convert(SysDeptDTO.class))
