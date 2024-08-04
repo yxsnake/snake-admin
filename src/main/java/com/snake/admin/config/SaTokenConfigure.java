@@ -7,7 +7,6 @@ import cn.dev33.satoken.util.SaFoxUtil;
 import io.github.yxsnake.pisces.web.core.framework.common.SwaggerExcludePathCons;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,22 +22,6 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         SaStrategy.instance.createToken = (loginId, loginType) -> {
             return SaFoxUtil.getRandomString(32);    // 随机32位长度字符串
         };
-    }
-
-    /**
-     * 跨域配置
-     *
-     * @param registry
-     */
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("POST", "GET", "OPTIONS")
-                .maxAge(3600)
-                // 是否允许发送Cookie
-                .allowCredentials(true)
-                .allowedHeaders("*");
     }
 
     // 注册拦截器
