@@ -40,7 +40,7 @@ public class LoginService {
 
 
         SysUserEntity sysUserEntity = sysUserEntityService.lambdaQuery()
-                .eq(SysUserEntity::getUsername, form.getAccount())
+                .eq(SysUserEntity::getUsername, form.getUsername())
                 .list().stream().findFirst().orElse(null);
         BizAssert.isTrue("用户不存在", Objects.isNull(sysUserEntity));
         SysUserStatusEnum sysUserStatusEnum = SysUserStatusEnum.getInstance(sysUserEntity.getStatus());

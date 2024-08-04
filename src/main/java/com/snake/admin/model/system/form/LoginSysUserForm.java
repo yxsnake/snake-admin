@@ -10,7 +10,7 @@ public class LoginSysUserForm {
 
     @Schema(description = "账号",requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "账号不允许为空")
-    private String account;
+    private String username;
 
     @Schema(description = "密码",requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "密码不允许为空")
