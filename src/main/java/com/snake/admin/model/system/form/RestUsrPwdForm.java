@@ -10,7 +10,7 @@ public class RestUsrPwdForm {
 
     @Schema(description = "重置用户账号")
     @NotBlank(message = "账号不能为空")
-    private String account;
+    private String username;
 
     @Schema(description = "重置用户ID")
     @NotBlank(message = "请选择一个用户")
