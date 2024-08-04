@@ -1,10 +1,13 @@
 package com.snake.admin.model.system.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * @author: snake
@@ -35,10 +38,12 @@ public class RouteMenuDTO {
     private String name;
 
     @Schema(description = "组件名称")
+    @JsonInclude(NON_EMPTY)
     private String component;
 
     @Schema(description = "路由元数据信息")
     private RouteMenuMetaDTO meta;
 
+    @JsonInclude(NON_EMPTY)
     private List<RouteMenuDTO> children;
 }

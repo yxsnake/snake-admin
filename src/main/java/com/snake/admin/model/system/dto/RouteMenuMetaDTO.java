@@ -1,9 +1,13 @@
 package com.snake.admin.model.system.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.Set;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /**
  * @author: snake
@@ -22,12 +26,15 @@ public class RouteMenuMetaDTO {
     private String title;
 
     @Schema(description = "排序")
+    @JsonInclude(NON_NULL)
     private Long rank;
 
     @Schema(description = "当前路由具有权限的角色标识集合")
+    @JsonInclude(NON_EMPTY)
     private Set<String> roles;
 
     @Schema(description = "当前按钮具备可用的权限标识集合")
+    @JsonInclude(NON_EMPTY)
     private Set<String> auths;
 
 }

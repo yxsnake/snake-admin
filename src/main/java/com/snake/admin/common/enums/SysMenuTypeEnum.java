@@ -13,6 +13,8 @@ import java.util.Arrays;
  */
 @Getter
 public enum SysMenuTypeEnum implements IBaseEnum<Integer> {
+    DIR(99,"目录"),
+
     MENU(0,"菜单"),
 
     IFRAME(1,"iframe"),

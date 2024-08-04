@@ -138,6 +138,7 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
             list.stream().forEach(menu->{
                 String menuId = menu.getId();
                 Integer menuType = menu.getMenuType();
+                SysMenuTypeEnum menuTypeEnum = SysMenuTypeEnum.getInstance(menuType);
                 RouteMenuDTO routeMenuDTO = new RouteMenuDTO();
                 routeMenuDTO.setId(menuId);
                 routeMenuDTO.setMenuType(menuType);
@@ -148,9 +149,10 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
 
                 RouteMenuMetaDTO menuMetaDTO = new RouteMenuMetaDTO();
                 menuMetaDTO.setIcon(menu.getIcon());
-                menuMetaDTO.setRank(menu.getRank());
                 menuMetaDTO.setTitle(menu.getTitle());
-
+                if(SysMenuTypeEnum.DIR.equals(menuTypeEnum)){
+                    menuMetaDTO.setRank(menu.getRank());
+                }
                 SysMenuTypeEnum sysMenuTypeEnum = SysMenuTypeEnum.getInstance(menuType);
                 if(SysMenuTypeEnum.BUTTON.equals(sysMenuTypeEnum)){
                     Set<String> auths = buttonAllowAuthMap.get(menuId);
@@ -162,7 +164,7 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
 
                     }
                     menuMetaDTO.setAuths(auths);
-                }else{
+                }else if(SysMenuTypeEnum.MENU.equals(sysMenuTypeEnum) || SysMenuTypeEnum.LINK.equals(sysMenuTypeEnum)){
                     Set<String> roles = menuAllowRolesMap.get(menuId);
                     // 如果是系统管理员角色
                     if(containsAdminRole){
