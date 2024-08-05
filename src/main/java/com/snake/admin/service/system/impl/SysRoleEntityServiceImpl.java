@@ -74,6 +74,7 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
         return this.page(new Page<>(queryFilter.getPageNum(),queryFilter.getPageSize()),
                 Wrappers.lambdaQuery(SysRoleEntity.class)
                         .eq(Objects.nonNull(equalsQueries.getStatus()),SysRoleEntity::getStatus,equalsQueries.getStatus())
+                        .ne(SysRoleEntity::getCode,SysRoleEntity.ROLE_CODE_ADMIN)
                         .like(StrUtil.isNotBlank(fuzzyQueries.getName()),SysRoleEntity::getName,fuzzyQueries.getName())
                         .like(StrUtil.isNotBlank(fuzzyQueries.getCode()),SysRoleEntity::getCode,fuzzyQueries.getCode())
         ).convert(item->item.convert(SysRoleDTO.class));
