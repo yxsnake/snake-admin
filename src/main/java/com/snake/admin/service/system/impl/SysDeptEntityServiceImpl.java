@@ -38,9 +38,10 @@ public class SysDeptEntityServiceImpl extends ServiceImpl<SysDeptEntityMapper, S
         BizAssert.isTrue("名称已存在",Objects.nonNull(deptEntity));
 
         // 校验 只允许创建一个顶级部门  就是 公司名称
-        deptEntity = this.lambdaQuery().eq(SysDeptEntity::getParentId,SysDeptEntity.ROOT).list().stream().findFirst().orElse(null);
-        BizAssert.isTrue("已存在顶级部门",Objects.nonNull(deptEntity));
-
+        if(StrUtil.isBlank(form.getParentId())){
+            deptEntity = this.lambdaQuery().eq(SysDeptEntity::getParentId,SysDeptEntity.ROOT).list().stream().findFirst().orElse(null);
+            BizAssert.isTrue("已存在顶级部门",Objects.nonNull(deptEntity));
+        }
         String id = IdWorker.getIdStr();
         String parentId = form.getParentId();
         SysDeptEntity sysDeptEntity = form.convert(SysDeptEntity.class);
