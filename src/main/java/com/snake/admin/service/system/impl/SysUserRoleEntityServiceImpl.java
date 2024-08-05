@@ -96,4 +96,13 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
         }
         return roleCodes.contains(SysRoleEntity.ROLE_CODE_ADMIN);
     }
+
+    @Override
+    public List<String> getRoleIdsByUserId(String userId) {
+       return this.lambdaQuery().eq(SysUserRoleEntity::getUserId,userId)
+               .list()
+               .stream()
+               .map(SysUserRoleEntity::getRoleId)
+               .collect(Collectors.toList());
+    }
 }
