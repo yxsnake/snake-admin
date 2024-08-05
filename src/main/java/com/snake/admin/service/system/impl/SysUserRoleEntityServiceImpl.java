@@ -99,10 +99,21 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
 
     @Override
     public List<String> getRoleIdsByUserId(String userId) {
-       return this.lambdaQuery().eq(SysUserRoleEntity::getUserId,userId)
-               .list()
-               .stream()
-               .map(SysUserRoleEntity::getRoleId)
-               .collect(Collectors.toList());
+        Boolean containsAdminRole = this.containsAdminRole(userId);
+        if(containsAdminRole){
+            return sysRoleEntityMapper.selectList(
+                    Wrappers.lambdaQuery(SysRoleEntity.class)
+                            .eq(SysRoleEntity::getCode,SysRoleEntity.ROLE_CODE_ADMIN)
+                    )
+                    .stream()
+                    .map(SysRoleEntity::getId)
+                    .collect(Collectors.toList());
+        }else{
+            return this.lambdaQuery().eq(SysUserRoleEntity::getUserId,userId)
+                    .list()
+                    .stream()
+                    .map(SysUserRoleEntity::getRoleId)
+                    .collect(Collectors.toList());
+        }
     }
 }
