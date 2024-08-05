@@ -30,10 +30,10 @@ public class SysMenuController extends BaseController {
     private final SysMenuEntityService sysMenuEntityService;
 
 
-    @Operation(summary = "根据用户查询菜单列表")
+    @Operation(summary = "查询菜单列表")
     @GetMapping(value = "/list",headers = Cons.HEADER_AUTHORIZATION)
-    public ResponseEntity<Result<List<SysMenuDTO>>> list(@PathVariable("userId") String userId){
-        return success(sysMenuEntityService.listByUserId(userId));
+    public ResponseEntity<Result<List<SysMenuDTO>>> list(){
+        return success(sysMenuEntityService.queryList());
     }
 
     @Operation(summary = "创建菜单")

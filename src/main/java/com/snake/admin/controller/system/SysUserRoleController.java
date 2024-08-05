@@ -12,10 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "运营平台-用户分配角色")
 @Slf4j
@@ -31,6 +30,12 @@ public class SysUserRoleController extends BaseController {
     public ResponseEntity<Result<Boolean>> authorizedRole(@Validated @RequestBody AuthorizedSysUserRoleForm form){
         sysUserRoleEntityService.authorizedRole(form);
         return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "获取当前用户的所有角色ID")
+    @GetMapping(value = "/list-role-ids/{userId}")
+    public ResponseEntity<Result<List<String>>> getRoleIdsByUserId(@PathVariable("userId") String userId){
+        return success(sysUserRoleEntityService.getRoleIdsByUserId(userId));
     }
 
 

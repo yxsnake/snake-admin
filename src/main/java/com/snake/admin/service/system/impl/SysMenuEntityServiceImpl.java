@@ -247,6 +247,11 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         }
     }
 
+    @Override
+    public List<SysMenuDTO> queryList() {
+        return this.lambdaQuery().list().stream().map(sysMenuEntity -> sysMenuEntity.convert(SysMenuDTO.class)).collect(Collectors.toList());
+    }
+
     private List<RouteMenuDTO> streamToTree(List<RouteMenuDTO> routes, String parentId) {
         List<RouteMenuDTO> list = routes.stream()
                 .filter(item -> item.getParentId().equals(parentId))

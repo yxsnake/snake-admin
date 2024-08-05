@@ -11,6 +11,8 @@ import com.snake.admin.model.system.form.UpdateSysRoleStatusForm;
 import com.snake.admin.model.system.fuzzy.QuerySysRoleFuzzy;
 import io.github.yxsnake.pisces.web.core.base.QueryFilter;
 
+import java.util.List;
+
 public interface SysRoleEntityService extends IService<SysRoleEntity> {
 
     void create(CreateSysRoleForm form);
@@ -24,4 +26,6 @@ public interface SysRoleEntityService extends IService<SysRoleEntity> {
     void deleteById(String id);
 
     void updateStatus(UpdateSysRoleStatusForm form);
+
+    List<SysRoleDTO> getAllRoleList();
 }

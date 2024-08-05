@@ -25,7 +25,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -97,5 +99,13 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
         BizAssert.isTrue("角色信息不存在", Objects.isNull(sysRoleEntity));
         sysRoleEntity.setStatus(form.getStatus());
         this.getBaseMapper().updateById(sysRoleEntity);
+    }
+
+    @Override
+    public List<SysRoleDTO> getAllRoleList() {
+        return this.lambdaQuery().list()
+                .stream()
+                .map(sysRoleEntity -> sysRoleEntity.convert(SysRoleDTO.class))
+                .collect(Collectors.toList());
     }
 }

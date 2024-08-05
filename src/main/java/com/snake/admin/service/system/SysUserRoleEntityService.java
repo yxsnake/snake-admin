@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.snake.admin.model.system.entity.SysUserRoleEntity;
 import com.snake.admin.model.system.form.AuthorizedSysUserRoleForm;
 
+import java.util.List;
 import java.util.Set;
 
 public interface SysUserRoleEntityService extends IService<SysUserRoleEntity> {
@@ -19,4 +20,6 @@ public interface SysUserRoleEntityService extends IService<SysUserRoleEntity> {
     void authorizedRole(AuthorizedSysUserRoleForm form);
 
     Boolean containsAdminRole(String userId);
+
+    List<String> getRoleIdsByUserId(String userId);
 }
