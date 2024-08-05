@@ -21,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "运营平台-角色")
 @Slf4j
 @RestController
@@ -48,6 +50,12 @@ public class SysRoleController extends BaseController {
     @GetMapping(value = "/detail/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<SysRoleDTO>> detail(@PathVariable("id") String id){
         return success(sysRoleEntityService.detail(id));
+    }
+
+    @Operation(summary = "查询角色")
+    @GetMapping(value = "/all-role-list",headers = Cons.HEADER_AUTHORIZATION)
+    public ResponseEntity<Result<List<SysRoleDTO>>> getAllRoleList(){
+        return success(sysRoleEntityService.getAllRoleList());
     }
 
     @Operation(summary = "分页查询角色列表")
