@@ -159,6 +159,13 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
                 if(SysMenuTypeEnum.DIR.equals(menuTypeEnum)){
                     menuMetaDTO.setRank(menu.getRank());
                 }
+                if(SysMenuTypeEnum.IFRAME.equals(menuTypeEnum)){
+                    routeMenuDTO.setRedirect(menu.getRedirect());
+                    routeMenuDTO.setComponent("IFrame");
+                    menuMetaDTO.setFrameSrc(menu.getFrameSrc());
+                    menuMetaDTO.setKeepAlive(menu.getKeepAlive());
+                }
+
                 SysMenuTypeEnum sysMenuTypeEnum = SysMenuTypeEnum.getInstance(menuType);
                 if(SysMenuTypeEnum.BUTTON.equals(sysMenuTypeEnum)){
                     Set<String> auths = buttonAllowAuthMap.get(menuId);

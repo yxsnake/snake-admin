@@ -41,6 +41,10 @@ public class RouteMenuDTO {
     @JsonInclude(NON_EMPTY)
     private String component;
 
+    @Schema(description = "重定向")
+    @JsonInclude(NON_EMPTY)
+    private String redirect;
+
     @Schema(description = "路由元数据信息")
     private RouteMenuMetaDTO meta;
 

@@ -37,4 +37,9 @@ public class RouteMenuMetaDTO {
     @JsonInclude(NON_EMPTY)
     private Set<String> auths;
 
+    @JsonInclude(NON_EMPTY)
+    private String frameSrc;
+
+    private Boolean keepAlive;
+
 }
