@@ -44,6 +44,8 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
 
     private final SysRoleEntityMapper sysRoleEntityMapper;
 
+    private final SysMenuRouteService sysMenuRouteService;
+
     @Override
     public List<SysMenuDTO> listByUserId(String userId) {
         List<SysMenuEntity> menus = this.getBaseMapper().selectMenuListByUserId(userId);
@@ -142,53 +144,10 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
 
 
             list.stream().forEach(menu->{
-                String menuId = menu.getId();
-                Integer menuType = menu.getMenuType();
-                SysMenuTypeEnum menuTypeEnum = SysMenuTypeEnum.getInstance(menuType);
-                RouteMenuDTO routeMenuDTO = new RouteMenuDTO();
-                routeMenuDTO.setId(menuId);
-                routeMenuDTO.setMenuType(menuType);
-                routeMenuDTO.setName(menu.getName());
-                routeMenuDTO.setPath(menu.getPath());
-                routeMenuDTO.setParentId(menu.getParentId());
-                routeMenuDTO.setComponent(menu.getComponent());
-
-                RouteMenuMetaDTO menuMetaDTO = new RouteMenuMetaDTO();
-                menuMetaDTO.setIcon(menu.getIcon());
-                menuMetaDTO.setTitle(menu.getTitle());
-                if(SysMenuTypeEnum.DIR.equals(menuTypeEnum)){
-                    menuMetaDTO.setRank(menu.getRank());
+                RouteMenuDTO routeMenuDTO = convertMenuRoute(containsAdminRole,list,menuAllowRolesMap,buttonAllowAuthMap,menu);
+                if(Objects.nonNull(routeMenuDTO)){
+                    routeMenuList.add(routeMenuDTO);
                 }
-                if(SysMenuTypeEnum.IFRAME.equals(menuTypeEnum)){
-                    routeMenuDTO.setRedirect(menu.getRedirect());
-                    routeMenuDTO.setComponent("IFrame");
-                    menuMetaDTO.setFrameSrc(menu.getFrameSrc());
-                    menuMetaDTO.setKeepAlive(menu.getKeepAlive());
-                }
-
-                SysMenuTypeEnum sysMenuTypeEnum = SysMenuTypeEnum.getInstance(menuType);
-                if(SysMenuTypeEnum.BUTTON.equals(sysMenuTypeEnum)){
-                    Set<String> auths = buttonAllowAuthMap.get(menuId);
-                    // 如果是系统管理员角色
-                    if(containsAdminRole){
-                        auths = list.stream()
-                                .filter(sysMenuEntity -> SysMenuTypeEnum.BUTTON.equals(sysMenuEntity.getMenuType()))
-                                .map(SysMenuEntity::getAuths).collect(Collectors.toSet());
-
-                    }
-                    menuMetaDTO.setAuths(auths);
-                }else if(SysMenuTypeEnum.MENU.equals(sysMenuTypeEnum) || SysMenuTypeEnum.LINK.equals(sysMenuTypeEnum)){
-                    Set<String> roles = menuAllowRolesMap.get(menuId);
-                    // 如果是系统管理员角色
-                    if(containsAdminRole){
-                        roles = Sets.newHashSet();
-                        roles.add(SysRoleEntity.ROLE_CODE_ADMIN);
-                    }
-                    menuMetaDTO.setRoles(roles);
-
-                }
-                routeMenuDTO.setMeta(menuMetaDTO);
-                routeMenuList.add(routeMenuDTO);
             });
         }
 
@@ -276,6 +235,28 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         }).collect(Collectors.toList());
         return list;
     }
+
+
+    private RouteMenuDTO convertMenuRoute(Boolean containsAdminRole,
+                                          List<SysMenuEntity> currentUserMenuList,
+                                          Map<String, Set<String>> menuAllowRolesMap,
+                                          Map<String, Set<String>> buttonAllowAuthMap,
+                                          SysMenuEntity menu){
+        Integer menuType = menu.getMenuType();
+        SysMenuTypeEnum menuTypeEnum = SysMenuTypeEnum.getInstance(menuType);
+        RouteMenuDTO router = null;
+        switch (menuTypeEnum){
+            case DIR -> router = sysMenuRouteService.entityToDir(containsAdminRole,currentUserMenuList,menuAllowRolesMap,buttonAllowAuthMap,menu);
+            case MENU -> router = sysMenuRouteService.entityToMenu(containsAdminRole,currentUserMenuList,menuAllowRolesMap,buttonAllowAuthMap,menu);
+            case IFRAME -> router = sysMenuRouteService.entityToIFrame(containsAdminRole,currentUserMenuList,menuAllowRolesMap,buttonAllowAuthMap,menu);
+            case LINK -> router = sysMenuRouteService.entityToLink(containsAdminRole,currentUserMenuList,menuAllowRolesMap,buttonAllowAuthMap,menu);
+            case BUTTON -> router = sysMenuRouteService.entityToButton(containsAdminRole,currentUserMenuList,menuAllowRolesMap,buttonAllowAuthMap,menu);
+            default -> router = sysMenuRouteService.defaultConvert(containsAdminRole,currentUserMenuList,menuAllowRolesMap,buttonAllowAuthMap,menu);
+        }
+        return router;
+
+    }
+
 
 
 

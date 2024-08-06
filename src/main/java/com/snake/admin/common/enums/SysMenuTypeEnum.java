@@ -4,6 +4,7 @@ import io.github.yxsnake.pisces.web.core.base.IBaseEnum;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @author: snake
@@ -28,7 +29,7 @@ public enum SysMenuTypeEnum implements IBaseEnum<Integer> {
 
     private final String label;
 
-    SysMenuTypeEnum(final Integer value,final String label){
+    SysMenuTypeEnum(final int value,final String label){
         this.value = value;
         this.label = label;
     }
