@@ -73,6 +73,7 @@ public class SysMenuRouteService {
         RouteMenuMetaDTO menuMetaDTO = new RouteMenuMetaDTO();
         menuMetaDTO.setIcon(menu.getIcon());
         menuMetaDTO.setTitle(menu.getTitle());
+        menuMetaDTO.setRank(menu.getRank());
 
         Set<String> roles = menuAllowRolesMap.get(menuId);
         // 如果是系统管理员角色
