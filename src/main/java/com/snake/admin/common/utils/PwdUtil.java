@@ -14,7 +14,7 @@ public class PwdUtil{
     public static String ciphertext(String username,String rawPwd){
         BizAssert.isTrue("username is missing", StrUtil.isBlank(username));
         BizAssert.isTrue("rawPwd is missing", StrUtil.isBlank(rawPwd));
-        String format = String.format(username, rawPwd, username);
+        String format = String.format(FORMAT_TEXT,username, rawPwd, username);
         return SM3Util.encryptText(format);
     }
 
