@@ -24,4 +24,9 @@ public class PwdUtil{
         String pwd = ciphertext(username, rawPwd);
         return pwd.equals(ciphertext);
     }
+
+    public static void main(String[] args) {
+        String ciphertext = ciphertext("admin", "8tj657VNMn!");
+        System.out.println(ciphertext);
+    }
 }
