@@ -126,7 +126,21 @@ public class SysMenuRouteService {
                                      Map<String, Set<String>> menuAllowRolesMap,
                                      Map<String, Set<String>> buttonAllowAuthMap,
                                      SysMenuEntity menu) {
-        return null;
+        String menuId = menu.getId();
+        Integer menuType = menu.getMenuType();
+        RouteMenuDTO routeMenuDTO = new RouteMenuDTO();
+        routeMenuDTO.setId(menuId);
+        routeMenuDTO.setMenuType(menuType);
+        routeMenuDTO.setName(menu.getName());
+        routeMenuDTO.setPath(menu.getPath());
+
+        RouteMenuMetaDTO menuMetaDTO = new RouteMenuMetaDTO();
+        menuMetaDTO.setIcon(menu.getIcon());
+        menuMetaDTO.setTitle(menu.getTitle());
+        menuMetaDTO.setRank(menu.getRank());
+
+        routeMenuDTO.setMeta(menuMetaDTO);
+        return routeMenuDTO;
     }
 
     public RouteMenuDTO entityToButton(Boolean containsAdminRole,
