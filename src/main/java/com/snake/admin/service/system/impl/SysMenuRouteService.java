@@ -130,9 +130,11 @@ public class SysMenuRouteService {
         Integer menuType = menu.getMenuType();
         RouteMenuDTO routeMenuDTO = new RouteMenuDTO();
         routeMenuDTO.setId(menuId);
+        routeMenuDTO.setParentId(menu.getParentId());
         routeMenuDTO.setMenuType(menuType);
         routeMenuDTO.setName(menu.getName());
         routeMenuDTO.setPath(menu.getPath());
+
 
         RouteMenuMetaDTO menuMetaDTO = new RouteMenuMetaDTO();
         menuMetaDTO.setIcon(menu.getIcon());
