@@ -57,16 +57,16 @@ public class SysMenuEntity extends BaseEntity implements Convert {
 
     private String frameSrc;
 
-    private Integer frameLoading;
+    private Boolean frameLoading;
 
-    private Integer keepAlive;
+    private Boolean keepAlive;
 
-    private Integer hiddenTag;
+    private Boolean hiddenTag;
 
-    private Integer fixedTag;
+    private Boolean fixedTag;
 
-    private Integer showLink;
+    private Boolean showLink;
 
-    private Integer showParent;
+    private Boolean showParent;
 
 }

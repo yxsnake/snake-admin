@@ -62,9 +62,11 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         if(StrUtil.isBlank(parentId)){
             parentId = SysMenuEntity.ROOT_PARENT;
         }else{
-            // 查询上级菜单是否存在
-            SysMenuEntity sysMenuEntity = this.getBaseMapper().selectById(parentId);
-            BizAssert.isTrue("上级菜单不存在",Objects.isNull(sysMenuEntity));
+            if(!SysMenuEntity.ROOT_PARENT.equals(parentId)){
+                // 查询上级菜单是否存在
+                SysMenuEntity sysMenuEntity = this.getBaseMapper().selectById(parentId);
+                BizAssert.isTrue("上级菜单不存在",Objects.isNull(sysMenuEntity));
+            }
         }
         // 校验当前层级是否存在重复名称
         long count = this.lambdaQuery().eq(SysMenuEntity::getParentId, parentId).eq(SysMenuEntity::getTitle, form.getName()).list().stream().count();

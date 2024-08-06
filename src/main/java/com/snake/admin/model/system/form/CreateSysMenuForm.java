@@ -53,22 +53,22 @@ public class CreateSysMenuForm implements Convert {
     private String activePath;
 
     @Schema(description = "是否显示该菜单")
-    private Integer showLink = 1;
+    private Boolean showLink = true;
 
     @Schema(description = "是否显示父级菜单")
-    private Integer showParent = 0;
+    private Boolean showParent = false;
 
     @Schema(description = "是否缓存页面")
-    private Integer keepAlive = 0;
+    private Boolean keepAlive = false;
 
     @Schema(description = "当前菜单名称或自定义信息禁止添加到标签页")
-    private Integer hiddenTag = 1;
+    private Boolean hiddenTag = true;
 
     @Schema(description = "当前菜单名称是否固定显示在标签页且不可关闭")
-    private Integer fixedTag  = 0;
+    private Boolean fixedTag  = false;
 
     @Schema(description = "加载动画（0-false;1-true,内嵌的`iframe`页面是否开启首次加载动画）")
-    private Integer frameLoading = 1;
+    private Boolean frameLoading = true;
 
     @Schema(description = "链接地址（需要内嵌的`iframe`链接地址）")
     private String frameSrc;
