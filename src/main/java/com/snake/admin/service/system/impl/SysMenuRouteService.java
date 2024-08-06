@@ -104,6 +104,7 @@ public class SysMenuRouteService {
         RouteMenuMetaDTO menuMetaDTO = new RouteMenuMetaDTO();
         menuMetaDTO.setIcon(menu.getIcon());
         menuMetaDTO.setTitle(menu.getTitle());
+        menuMetaDTO.setRank(menu.getRank());
 
 
         menuMetaDTO.setFrameSrc(menu.getFrameSrc());
