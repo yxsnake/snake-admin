@@ -101,6 +101,10 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         // 查询菜单是否绑定角色
         Boolean existMenuBindRole = sysRoleMenuEntityService.existMenuBindRole(id);
         BizAssert.isTrue("当前菜单已分配给角色，无法删除",existMenuBindRole);
+        SysMenuEntity sysMenuEntity = this.getBaseMapper().selectById(id);
+        if(Objects.nonNull(sysMenuEntity)){
+            BizAssert.isTrue("当前菜单不允许删除",SysMenuEntity.NOT_ALLOW_DELETE_MENU_LIST.contains(sysMenuEntity.getPath()));
+        }
         this.getBaseMapper().deleteById(id);
     }
 

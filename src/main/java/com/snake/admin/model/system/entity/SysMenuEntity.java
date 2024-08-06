@@ -7,11 +7,22 @@ import io.github.yxsnake.pisces.web.core.base.BaseEntity;
 import io.github.yxsnake.pisces.web.core.converter.Convert;
 import lombok.Data;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Data
 @TableName(value = "sys_menu")
 public class SysMenuEntity extends BaseEntity implements Convert {
 
     public final static String ROOT_PARENT = "0";
+
+    public final static List<String> NOT_ALLOW_DELETE_MENU_LIST = Arrays.asList(
+            "/system",
+            "/system/user/index",
+            "/system/role/index",
+            "/system/menu/index",
+            "/system/dept/index"
+    );
 
     @TableId(type = IdType.NONE)
     private String id;
