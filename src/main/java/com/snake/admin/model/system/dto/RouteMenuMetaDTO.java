@@ -30,14 +30,11 @@ public class RouteMenuMetaDTO {
     private Long rank;
 
     @Schema(description = "当前路由具有权限的角色标识集合")
-    @JsonInclude(NON_EMPTY)
     private Set<String> roles;
 
     @Schema(description = "当前按钮具备可用的权限标识集合")
-    @JsonInclude(NON_EMPTY)
     private Set<String> auths;
 
-    @JsonInclude(NON_EMPTY)
     private String frameSrc;
 
     private Boolean keepAlive;
