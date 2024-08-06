@@ -89,7 +89,7 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
         SysRoleEntity sysRoleEntity = this.getBaseMapper().selectById(id);
         BizAssert.isTrue("角色不存在",Objects.isNull(sysRoleEntity));
         BizAssert.isTrue("管理员角色不允许删除",SysRoleEntity.ROLE_CODE_ADMIN.equals(sysRoleEntity.getCode()));
-        this.deleteById(id);
+        this.getBaseMapper().deleteById(id);
     }
 
     @Override
