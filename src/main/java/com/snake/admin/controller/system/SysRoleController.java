@@ -64,7 +64,7 @@ public class SysRoleController extends BaseController {
         return success(sysRoleEntityService.pageList(queryFilter));
     }
 
-    @Operation(summary = "查询角色")
+    @Operation(summary = "删除角色")
     @GetMapping(value = "/delete/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<Boolean>> deleteById(@PathVariable("id") String id){
         sysRoleEntityService.deleteById(id);
