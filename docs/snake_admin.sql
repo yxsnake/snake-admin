@@ -11,7 +11,7 @@
  Target Server Version : 50736 (5.7.36)
  File Encoding         : 65001
 
- Date: 05/08/2024 02:33:59
+ Date: 07/08/2024 07:56:42
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,13 @@ CREATE TABLE `sys_dept`  (
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-INSERT INTO `sys_dept` VALUES ('1819394579972079617', '0', '陕西蓝东科技', '18512341234', '张三', '370696614@qq.com', NULL, 1, '公司', 0, '2024-08-02 23:27:25', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dept` VALUES ('1819394579972079617', '0', '陕西蓝东科技', '18512341234', '张三', '370696614@qq.com', NULL, 1, '公司日哥', 0, '2024-08-02 23:27:25', NULL, NULL, '2024-08-05 23:02:43', NULL, NULL);
+INSERT INTO `sys_dept` VALUES ('1820476856873492481', '1819394579972079617', '研发部', '18512341234', '张三', '18512341234@163.com', NULL, 1, '研发部', 1, '2024-08-05 23:08:00', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dept` VALUES ('1820476958392426498', '1820476856873492481', '研发一组', '', '李小鹏', '', NULL, 1, '', 1, '2024-08-05 23:08:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dept` VALUES ('1820477107168583682', '1819394579972079617', '营销部', '', '吕一', '', NULL, 1, '', 0, '2024-08-05 23:09:00', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dept` VALUES ('1820477169416249345', '1819394579972079617', '财务部', '', '张大千', '', NULL, 1, '', 0, '2024-08-05 23:09:15', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dept` VALUES ('1820477370180804609', '1820477107168583682', '营销特战队', '', '', '', NULL, 1, '', 0, '2024-08-05 23:10:03', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_dept` VALUES ('1820477411180126209', '1820477169416249345', '账务核查', '', '', '', NULL, 1, '', 0, '2024-08-05 23:10:12', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -85,11 +91,14 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('1819614103262461953', '0', 99, '系统管理', 'PureSystem', '/system', '', 10, '', 'ri:settings-3-line', '', 'bounce', 'bounce', '', '', '', 0, 0, 0, 0, 0, 0, '2024-08-03 13:59:44', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1819614103262461953', '0', 99, '系统管理', 'PureSystem', '/system', '', 1, '', 'ri:settings-3-line', '', 'bounce', 'bounce', '', '', '', 0, 0, 0, 0, 0, 0, '2024-08-03 13:59:44', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1819614103262461954', '0', 99, '接口文档', NULL, '/snake-admin-doc', NULL, 100, '/snake-admin/pure-admin-doc', 'ri:terminal-window-line', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1819614103262461955', '1819614103262461954', 2, '运营平台接口文档', 'http://101.126.69.31:41000/doc.html', '/external', NULL, 102, NULL, 'fa-solid:ad', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1819614693686534146', '1819614103262461953', 0, '用户管理', 'SystemUser', '/system/user/index', '', 10, '', 'ri:admin-line', '', 'bounce', 'bounce', '', '', '', 0, 0, 0, 0, 0, 0, '2024-08-03 14:02:04', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1819614933785272321', '1819614103262461953', 0, '角色管理', 'SystemRole', '/system/role/index', '', 11, '', 'ri:admin-fill', '', 'bounce', 'bounce', '', '', '', 0, 0, 0, 0, 0, 0, '2024-08-03 14:03:02', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1819615102815723521', '1819614103262461953', 0, '菜单管理', 'SystemMenu', '/system/menu/index', '', 12, '', 'ep:menu', '', 'bounce', 'bounce', '', '', '', 0, 0, 0, 0, 0, 0, '2024-08-03 14:03:42', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1819615242922254337', '1819614103262461953', 0, '部门管理', 'SystemDept', '/system/dept/index', '', 13, '', 'ri:git-branch-line', '', 'bounce', 'bounce', '', '', '', 0, 0, 0, 0, 0, 0, '2024-08-03 14:04:15', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1820854703098048513', '1819614103262461954', 1, '前端开源框架文档', 'SnakeAdminDoc', '/snake-admin/pure-admin-doc', 'IFrame', 100, '', 'ri:terminal-window-line', '', '', '', '', '', 'https://pure-admin.github.io/pure-admin-doc/pages/introduction/', 1, 0, 0, 0, 1, 1, '2024-08-07 00:09:26', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -114,6 +123,7 @@ CREATE TABLE `sys_role`  (
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES ('1819395864901201922', '超级管理员', 'admin', 1, '超级管理员', '2024-08-02 23:32:32', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role` VALUES ('1820629320230727681', '普通角色', 'common', 1, '普通角色', '2024-08-06 09:13:50', NULL, NULL, '2024-08-06 09:14:38', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -165,7 +175,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1819395060203110402', 'admin', 'dc1fd00e3eeeb940ff46f457bf97d66ba7fcc36e0b20802383de142860e76ae6', '超级管理员', '18512341234', '370696614@qq.com', 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fci.xiaohongshu.com%2Ff0100d63-59d2-87d2-ac5c-eef40c134026%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fci.xiaohongshu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1725387907&t=433cfd651e6521a8344a7239c08e7ae1', 1, '超级管理员', 1, '1819394579972079617', '2024-08-02 23:29:20', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user` VALUES ('1819395060203110402', 'admin', '6f620dae6deb84a7ad7480441ccc4d0b35f3507af4a3c257902983bd9ebe7128', '超级管理员', '18512341234', '370696614@qq.com', 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fci.xiaohongshu.com%2Ff0100d63-59d2-87d2-ac5c-eef40c134026%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fci.xiaohongshu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1725387907&t=433cfd651e6521a8344a7239c08e7ae1', 1, '超级管理员', 1, '1819394579972079617', '2024-08-02 23:29:20', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_role
