@@ -134,8 +134,12 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
             Set<String> menuIds = list.stream()
                     .filter(sysMenuEntity -> !SysMenuTypeEnum.BUTTON.equals(sysMenuEntity.getMenuType()))
                     .map(SysMenuEntity::getId).collect(Collectors.toSet());
-            Map<String, Set<String>> menuAllowRolesMap = getMenuAllowRoles(menuIds);
-
+            Map<String, Set<String>> menuAllowRolesMap = Maps.newHashMap();
+            if(containsAdminRole){
+                menuAllowRolesMap = this.buildAdminMenuAllowRoles(menuIds);
+            }else{
+                menuAllowRolesMap = getMenuAllowRoles(menuIds);
+            }
             Set<String> buttonIds = list.stream()
                     .filter(sysMenuEntity -> SysMenuTypeEnum.BUTTON.equals(sysMenuEntity.getMenuType()))
                     .map(SysMenuEntity::getId).collect(Collectors.toSet());
@@ -188,6 +192,14 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
             });
             menuRoleCodeListMap.put(menuId,roles);
         });
+        return menuRoleCodeListMap;
+    }
+
+    private Map<String,Set<String>> buildAdminMenuAllowRoles(Set<String> menuIds){
+        Map<String,Set<String>> menuRoleCodeListMap = Maps.newHashMap();
+        for (String menuId : menuIds) {
+            menuRoleCodeListMap.put(menuId,Sets.newHashSet(SysRoleEntity.ROLE_CODE_ADMIN));
+        }
         return menuRoleCodeListMap;
     }
 
