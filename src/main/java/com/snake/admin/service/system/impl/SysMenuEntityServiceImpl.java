@@ -134,7 +134,7 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
             Set<String> menuIds = list.stream()
                     .filter(sysMenuEntity -> !SysMenuTypeEnum.BUTTON.equals(sysMenuEntity.getMenuType()))
                     .map(SysMenuEntity::getId).collect(Collectors.toSet());
-            Map<String, Set<String>> menuAllowRolesMap = Maps.newHashMap();
+            Map<String, Set<String>> menuAllowRolesMap = null;
             if(containsAdminRole){
                 menuAllowRolesMap = this.buildAdminMenuAllowRoles(menuIds);
             }else{
@@ -146,9 +146,9 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
 
             Map<String, Set<String>> buttonAllowAuthMap = getButtonAllowAuth(buttonIds);
 
-
+            final Map<String, Set<String>> finalMenuAllowRolesMap = menuAllowRolesMap;
             list.stream().forEach(menu->{
-                RouteMenuDTO routeMenuDTO = convertMenuRoute(containsAdminRole,list,menuAllowRolesMap,buttonAllowAuthMap,menu);
+                RouteMenuDTO routeMenuDTO = convertMenuRoute(containsAdminRole,list,finalMenuAllowRolesMap,buttonAllowAuthMap,menu);
                 if(Objects.nonNull(routeMenuDTO)){
                     routeMenuList.add(routeMenuDTO);
                 }
