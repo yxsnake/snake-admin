@@ -131,6 +131,7 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
         QuerySysUserFuzzy fuzzyQueries = QueryFilter.getFuzzyQueries(QuerySysUserFuzzy.class, queryFilter.getFuzzyQueries());
         return this.page(new Page<>(queryFilter.getPageNum(),queryFilter.getPageSize()),
                 Wrappers.lambdaQuery(SysUserEntity.class)
+                        .ne(SysUserEntity::getUsername,SysUserEntity.SUPPER_ACCOUNT)
                         .eq(SysUserEntity::getDeptId,equalsQueries.getDeptId())
                         .eq(Objects.nonNull(equalsQueries.getStatus()),SysUserEntity::getStatus,equalsQueries.getStatus())
                         .like(StrUtil.isNotBlank(fuzzyQueries.getUsername()),SysUserEntity::getUsername,fuzzyQueries.getUsername())

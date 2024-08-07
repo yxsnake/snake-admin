@@ -10,4 +10,5 @@ public class QuerySysUserEqual {
     private Integer status;
 
     private String deptId;
+
 }
