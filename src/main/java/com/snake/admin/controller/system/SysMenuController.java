@@ -64,7 +64,7 @@ public class SysMenuController extends BaseController {
     }
 
     @Operation(summary = "查询当前用户的菜单按钮权限列表树")
-    @GetMapping(value = "/get/current-user/routes/",headers = Cons.HEADER_AUTHORIZATION)
+    @GetMapping(value = "/get/current-user/routes",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<List<RouteMenuDTO>>> getCurrentUserRoutes(){
         return success(sysMenuEntityService.getCurrentUserRoutes(String.valueOf(StpUtil.getLoginId())));
     }
