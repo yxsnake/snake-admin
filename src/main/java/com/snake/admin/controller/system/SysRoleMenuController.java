@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class SysRoleMenuController extends BaseController {
 
     @Operation(summary = "角色授权菜单按钮")
     @PostMapping(value = "/authorized",headers = Cons.HEADER_AUTHORIZATION)
-    public ResponseEntity<Result<Boolean>> authorizedMenu(AuthorizedSysRoleMenuForm form){
+    public ResponseEntity<Result<Boolean>> authorizedMenu(@Validated @RequestBody AuthorizedSysRoleMenuForm form){
         sysRoleMenuEntityService.authorizedMenu(form);
         return success(Boolean.TRUE);
     }
