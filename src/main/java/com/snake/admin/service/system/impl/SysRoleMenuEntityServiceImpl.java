@@ -60,4 +60,11 @@ public class SysRoleMenuEntityServiceImpl extends ServiceImpl<SysRoleMenuEntityM
         });
         this.saveBatch(roleMenuEntities);
     }
+
+    @Override
+    public List<String> getMenuIdsByRoleId(String roleId) {
+        return this.lambdaQuery().eq(SysRoleMenuEntity::getRoleId,roleId)
+                .list().stream().map(SysRoleMenuEntity::getMenuId)
+                .collect(Collectors.toList());
+    }
 }

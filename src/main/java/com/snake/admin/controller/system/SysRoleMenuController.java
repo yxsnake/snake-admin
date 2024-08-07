@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "运营平台-角色分类菜单")
 @Slf4j
@@ -29,5 +29,11 @@ public class SysRoleMenuController extends BaseController {
     public ResponseEntity<Result<Boolean>> authorizedMenu(AuthorizedSysRoleMenuForm form){
         sysRoleMenuEntityService.authorizedMenu(form);
         return success(Boolean.TRUE);
+    }
+
+    @Operation(summary = "根据角色查询菜单ID")
+    @GetMapping(value = "/role-menu-ids/{roleId}",headers = Cons.HEADER_AUTHORIZATION)
+    public ResponseEntity<Result<List<String>>> getMenuIdsByRoleId(@PathVariable("roleId") String roleId){
+        return success(sysRoleMenuEntityService.getMenuIdsByRoleId(roleId));
     }
 }
