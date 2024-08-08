@@ -38,4 +38,6 @@ public class SysUserEntity extends BaseEntity implements Convert {
 
     private String deptId;
 
+    private Integer deleted;
+
 }

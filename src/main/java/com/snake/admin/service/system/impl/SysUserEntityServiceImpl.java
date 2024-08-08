@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.snake.admin.common.enums.SysDeptStatusEnum;
+import com.snake.admin.common.enums.SysUserDeletedEnum;
 import com.snake.admin.common.enums.SysUserStatusEnum;
 import com.snake.admin.common.utils.PwdUtil;
 import com.snake.admin.mapper.system.SysRoleEntityMapper;
@@ -149,5 +150,19 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
         String cipherTexted = PwdUtil.ciphertext(sysUserEntity.getUsername(), sysUserEntity.getUsername());
         sysUserEntity.setPassword(cipherTexted);
         this.getBaseMapper().updateById(sysUserEntity);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchDeleteUser(String userIds) {
+        List<SysUserEntity> list = this.lambdaQuery().in(SysUserEntity::getId)
+                .ne(SysUserEntity::getUsername, SysUserEntity.SUPPER_ACCOUNT)
+                .list();
+        if(CollUtil.isNotEmpty(list)){
+            list.stream().forEach(sysUserEntity -> {
+                sysUserEntity.setDeleted(SysUserDeletedEnum.DELETED.getValue());
+                this.getBaseMapper().updateById(sysUserEntity);
+            });
+        }
     }
 }

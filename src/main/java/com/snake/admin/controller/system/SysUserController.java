@@ -71,4 +71,11 @@ public class SysUserController extends BaseController {
         return success(Boolean.TRUE);
     }
 
+    @Operation(summary = "批了删除用户")
+    @GetMapping(value = "/batchDeleteUser")
+    public ResponseEntity<Result<Boolean>> batchDeleteUser(@RequestParam("userIds") String userIds){
+        sysUserEntityService.batchDeleteUser(userIds);
+        return success(Boolean.TRUE);
+    }
+
 }

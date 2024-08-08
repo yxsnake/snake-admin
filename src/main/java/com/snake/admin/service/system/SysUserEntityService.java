@@ -25,4 +25,6 @@ public interface SysUserEntityService extends IService<SysUserEntity> {
     IPage<SysUserDTO> pageList(QueryFilter<QuerySysUserEqual, QuerySysUserFuzzy> queryFilter);
 
     void restPassword(RestUsrPwdForm form);
+
+    void batchDeleteUser(String userIds);
 }
