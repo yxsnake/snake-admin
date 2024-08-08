@@ -78,6 +78,7 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
         userEntity.setAvatar(SysUserEntity.DEFAULT_AVATAR);
         userEntity.setPassword(ciphertext);
         userEntity.setStatus(SysUserStatusEnum.NORMAL.getValue());
+        userEntity.setDeleted(SysUserDeletedEnum.NORMAL.getValue());
         // 校验 部门是否存在 或者是否已禁用
         SysDeptEntity sysDeptEntity = sysDeptEntityService.getBaseMapper().selectById(deptId);
         BizAssert.isTrue("部门信息不存在", Objects.isNull(sysDeptEntity));
@@ -136,6 +137,7 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
                 Wrappers.lambdaQuery(SysUserEntity.class)
                         .ne(SysUserEntity::getUsername,SysUserEntity.SUPPER_ACCOUNT)
                         .eq(SysUserEntity::getDeptId,equalsQueries.getDeptId())
+                        .eq(SysUserEntity::getDeleted,SysUserDeletedEnum.NORMAL.getValue())
                         .eq(Objects.nonNull(equalsQueries.getStatus()),SysUserEntity::getStatus,equalsQueries.getStatus())
                         .like(StrUtil.isNotBlank(fuzzyQueries.getUsername()),SysUserEntity::getUsername,fuzzyQueries.getUsername())
                         .like(StrUtil.isNotBlank(fuzzyQueries.getPhone()),SysUserEntity::getPhone,fuzzyQueries.getPhone())
