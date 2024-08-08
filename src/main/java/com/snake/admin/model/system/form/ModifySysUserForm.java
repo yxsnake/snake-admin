@@ -21,10 +21,6 @@ public class ModifySysUserForm implements Convert {
     @NotBlank(message = "请填写用户名称")
     private String username;
 
-    @Schema(description = "用户密码")
-    @NotBlank(message = "请填写用户密码")
-    private String password;
-
     @Schema(description = "手机号")
     private String phone;
 
