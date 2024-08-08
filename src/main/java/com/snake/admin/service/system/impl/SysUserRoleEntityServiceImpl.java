@@ -71,6 +71,11 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
             userRoleEntity.setRoleId(sysRoleEntity.getId());
             userRoleEntities.add(userRoleEntity);
         });
+        // 查询当前用户关联的角色
+        List<SysUserRoleEntity> sysUserRoleEntities = this.lambdaQuery().eq(SysUserRoleEntity::getUserId, form.getUserId()).list();
+        if(CollUtil.isNotEmpty(sysUserRoleEntities)){
+            this.getBaseMapper().deleteBatchIds(sysUserRoleEntities.stream().map(SysUserRoleEntity::getId).collect(Collectors.toList()));
+        }
         this.saveBatch(userRoleEntities);
     }
 
