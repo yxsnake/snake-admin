@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -37,6 +38,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -155,7 +157,8 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void batchDeleteUser(String userIds) {
-        List<SysUserEntity> list = this.lambdaQuery().in(SysUserEntity::getId)
+        List<String> userIdList = Arrays.asList(userIds.split(StringPool.COMMA));
+        List<SysUserEntity> list = this.lambdaQuery().in(SysUserEntity::getId,userIdList)
                 .ne(SysUserEntity::getUsername, SysUserEntity.SUPPER_ACCOUNT)
                 .list();
         if(CollUtil.isNotEmpty(list)){
