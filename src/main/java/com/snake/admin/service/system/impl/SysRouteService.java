@@ -249,6 +249,18 @@ public class SysRouteService {
         meta.setTitle(menuEntity.getTitle());
         meta.setRank(menuEntity.getRank());
 
+        Set<String> roleCodeList = Sets.newHashSet();
+        // 如果是系统管理员角色
+        if(adminRole){
+            roleCodeList.add(SysRoleEntity.ROLE_CODE_ADMIN);
+        }else{
+            Set<String> roleIds = sysMenuRoleCacheService.readMenuRoleIdsCache(menuId);
+            if(CollUtil.isNotEmpty(roleIds)){
+                List<SysRoleEntity> sysRoleEntities = sysRoleCacheService.readRoleFormCache(roleIds);
+                roleCodeList = sysRoleEntities.stream().map(SysRoleEntity::getCode).collect(Collectors.toSet());
+            }
+        }
+        meta.setRoles(roleCodeList);
         route.setMeta(meta);
 
         return route;
