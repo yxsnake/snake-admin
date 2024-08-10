@@ -1,12 +1,10 @@
 package com.snake.admin.controller.system;
 
 import com.snake.admin.common.Cons;
-import com.snake.admin.model.system.dto.Route;
 import com.snake.admin.model.system.dto.SysMenuDTO;
 import com.snake.admin.model.system.form.CreateSysMenuForm;
 import com.snake.admin.model.system.form.ModifySysMenuForm;
 import com.snake.admin.service.system.SysMenuEntityService;
-import com.snake.admin.service.system.impl.SysRouteService;
 import io.github.yxsnake.pisces.web.core.base.Result;
 import io.github.yxsnake.pisces.web.core.framework.controller.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,9 +26,6 @@ import java.util.List;
 public class SysMenuController extends BaseController {
 
     private final SysMenuEntityService sysMenuEntityService;
-
-    private final SysRouteService sysRouteService;
-
 
     @Operation(summary = "查询菜单列表")
     @GetMapping(value = "/list",headers = Cons.HEADER_AUTHORIZATION)
@@ -63,11 +58,5 @@ public class SysMenuController extends BaseController {
     @GetMapping(value = "/detail/{id}",headers = Cons.HEADER_AUTHORIZATION)
     public ResponseEntity<Result<SysMenuDTO>> detail(@PathVariable("id") String id){
         return success(sysMenuEntityService.detail(id));
-    }
-
-    @Operation(summary = "查询当前用户的菜单按钮权限列表树")
-    @GetMapping(value = "/get/current-user/routes",headers = Cons.HEADER_AUTHORIZATION)
-    public ResponseEntity<Result<List<Route>>> getCurrentUserRoutes(){
-        return success(sysRouteService.currentUserRoutes());
     }
 }
