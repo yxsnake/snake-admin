@@ -17,7 +17,7 @@ public class RestUsrPwdForm {
     private String userId;
 
     @Schema(description = "安全口令")
-    @NotBlank(message = "重置安全口令")
+//    @NotBlank(message = "重置安全口令")
     private String safeCode;
 
 }

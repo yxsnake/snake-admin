@@ -147,7 +147,7 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void restPassword(RestUsrPwdForm form) {
-        BizAssert.isTrue("口令错误",!restPwdSafeCode.equals(form.getSafeCode()));
+//        BizAssert.isTrue("口令错误",!restPwdSafeCode.equals(form.getSafeCode()));
         SysUserEntity sysUserEntity = this.getBaseMapper().selectById(form.getUserId());
         BizAssert.isTrue("用户不存在",Objects.isNull(sysUserEntity));
         BizAssert.isTrue("超管账号密码不允许重置",SysUserEntity.SUPPER_ACCOUNT.equals(sysUserEntity.getUsername()));
