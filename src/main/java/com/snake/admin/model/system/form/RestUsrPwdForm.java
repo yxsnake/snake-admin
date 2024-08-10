@@ -16,8 +16,8 @@ public class RestUsrPwdForm {
     @NotBlank(message = "请选择一个用户")
     private String userId;
 
-    @Schema(description = "安全口令")
-//    @NotBlank(message = "重置安全口令")
-    private String safeCode;
+    @Schema(description = "新密码")
+    @NotBlank(message = "新密码不能为空")
+    private String newPwd;
 
 }
