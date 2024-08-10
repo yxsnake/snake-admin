@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface SysMenuEntityService extends IService<SysMenuEntity> {
 
-    List<SysMenuDTO> listByUserId(String userId);
-
     void create(CreateSysMenuForm form);
 
     void modify(ModifySysMenuForm form);
@@ -21,9 +19,7 @@ public interface SysMenuEntityService extends IService<SysMenuEntity> {
 
     SysMenuDTO detail(String id);
 
-    List<RouteMenuDTO> getCurrentUserRoutes(String s);
-
-    List<SysMenuEntity> getCurrentMenuIds(String userId,Boolean containsAdminRole);
+    List<SysMenuEntity> getMenuListByUserId(String userId,Boolean containsAdminRole);
 
     List<SysMenuDTO> queryList();
 }

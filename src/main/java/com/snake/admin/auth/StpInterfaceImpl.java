@@ -26,7 +26,7 @@ public class StpInterfaceImpl implements StpInterface {
     public List<String> getPermissionList(Object loginId, String loginType) {
         String userId = String.valueOf(loginId);
         Boolean containsAdminRole = sysUserRoleEntityService.containsAdminRole(userId);
-        List<SysMenuEntity> currentMenuIds = sysMenuEntityService.getCurrentMenuIds(userId, containsAdminRole);
+        List<SysMenuEntity> currentMenuIds = sysMenuEntityService.getMenuListByUserId(userId, containsAdminRole);
         if(CollUtil.isEmpty(currentMenuIds)){
             return Lists.newArrayList();
         }

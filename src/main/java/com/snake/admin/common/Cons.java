@@ -10,4 +10,10 @@ public interface Cons {
 
 
     String HEADER_AUTHORIZATION = "Authorization";
+
+
+    String CACHE_PREFIX = "snake-admin:";
+
+    String CACHE_REDIS_HASH_FORMAT = "%s:%s";
+
 }

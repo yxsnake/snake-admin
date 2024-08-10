@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.snake.admin.cache.system.SysUserRoleCacheService;
 import com.snake.admin.common.enums.SysRoleStatusEnum;
 import com.snake.admin.mapper.system.SysRoleEntityMapper;
 import com.snake.admin.mapper.system.SysUserRoleEntityMapper;
@@ -28,6 +29,8 @@ import java.util.stream.Collectors;
 public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityMapper, SysUserRoleEntity> implements SysUserRoleEntityService {
 
     private final SysRoleEntityMapper sysRoleEntityMapper;
+
+    private final SysUserRoleCacheService sysUserRoleCacheService;
 
     @Override
     public Boolean existRoleBindUser(String id) {
@@ -54,8 +57,10 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
     @Transactional(rollbackFor = Exception.class)
     public void authorizedRole(AuthorizedSysUserRoleForm form) {
         List<SysUserRoleEntity> list = this.lambdaQuery().eq(SysUserRoleEntity::getUserId, form.getUserId()).list();
+        Set<String> oldRoleIds = null;
         if(CollUtil.isNotEmpty(list)){
-            this.getBaseMapper().deleteBatchIds(list.stream().map(SysUserRoleEntity::getId).collect(Collectors.toSet()));
+            oldRoleIds = list.stream().map(SysUserRoleEntity::getId).collect(Collectors.toSet());
+            this.getBaseMapper().deleteBatchIds(oldRoleIds);
         }
         // 对前端传递参数进行去重
         Set<String> roleIds = Sets.newHashSet();
@@ -77,6 +82,10 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
             this.getBaseMapper().deleteBatchIds(sysUserRoleEntities.stream().map(SysUserRoleEntity::getId).collect(Collectors.toList()));
         }
         this.saveBatch(userRoleEntities);
+        if(CollUtil.isNotEmpty(oldRoleIds)){
+            sysUserRoleCacheService.removeUserRole(form.getUserId(),oldRoleIds);
+        }
+        sysUserRoleCacheService.writeUserRoleIdCache(form.getUserId(),roleIds);
     }
 
     /**

@@ -28,4 +28,6 @@ public interface SysRoleEntityService extends IService<SysRoleEntity> {
     void updateStatus(UpdateSysRoleStatusForm form);
 
     List<SysRoleDTO> getAllRoleList();
+
+    Boolean containsAdminRole(String userId);
 }

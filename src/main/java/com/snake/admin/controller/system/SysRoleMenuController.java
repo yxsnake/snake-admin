@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Tag(name = "运营平台-角色分类菜单")
 @Slf4j
@@ -34,7 +35,7 @@ public class SysRoleMenuController extends BaseController {
 
     @Operation(summary = "根据角色查询菜单ID")
     @GetMapping(value = "/role-menu-ids/{roleId}",headers = Cons.HEADER_AUTHORIZATION)
-    public ResponseEntity<Result<List<String>>> getMenuIdsByRoleId(@PathVariable("roleId") String roleId){
+    public ResponseEntity<Result<Set<String>>> getMenuIdsByRoleId(@PathVariable("roleId") String roleId){
         return success(sysRoleMenuEntityService.getMenuIdsByRoleId(roleId));
     }
 }

@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yxsnake.pisces.web.core.base.BaseEntity;
 import io.github.yxsnake.pisces.web.core.converter.Convert;
+import io.github.yxsnake.pisces.web.core.utils.JsonUtils;
 import lombok.Data;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @TableName(value = "sys_menu")
@@ -69,4 +71,22 @@ public class SysMenuEntity extends BaseEntity implements Convert {
 
     private Boolean showParent;
 
+    @Override
+    public String toString(){
+        return JsonUtils.objectCovertToJson(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SysMenuEntity that = (SysMenuEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(parentId, that.parentId) && Objects.equals(menuType, that.menuType) && Objects.equals(title, that.title) && Objects.equals(name, that.name) && Objects.equals(path, that.path) && Objects.equals(component, that.component) && Objects.equals(rank, that.rank) && Objects.equals(redirect, that.redirect) && Objects.equals(icon, that.icon) && Objects.equals(extraIcon, that.extraIcon) && Objects.equals(enterTransition, that.enterTransition) && Objects.equals(leaveTransition, that.leaveTransition) && Objects.equals(activePath, that.activePath) && Objects.equals(auths, that.auths) && Objects.equals(frameSrc, that.frameSrc) && Objects.equals(frameLoading, that.frameLoading) && Objects.equals(keepAlive, that.keepAlive) && Objects.equals(hiddenTag, that.hiddenTag) && Objects.equals(fixedTag, that.fixedTag) && Objects.equals(showLink, that.showLink) && Objects.equals(showParent, that.showParent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, parentId, menuType, title, name, path, component, rank, redirect, icon, extraIcon, enterTransition, leaveTransition, activePath, auths, frameSrc, frameLoading, keepAlive, hiddenTag, fixedTag, showLink, showParent);
+    }
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.snake.admin.cache.system.SysRoleMenuCacheService;
 import com.snake.admin.mapper.system.SysMenuEntityMapper;
 import com.snake.admin.mapper.system.SysRoleMenuEntityMapper;
 import com.snake.admin.model.system.entity.SysMenuEntity;
@@ -32,6 +33,8 @@ import java.util.stream.Collectors;
 public class SysRoleMenuEntityServiceImpl extends ServiceImpl<SysRoleMenuEntityMapper, SysRoleMenuEntity> implements SysRoleMenuEntityService {
 
     private final SysMenuEntityMapper sysMenuEntityMapper;
+
+    private final SysRoleMenuCacheService sysRoleMenuCacheService;
     @Override
     public Boolean existMenuBindRole(String id) {
         return this.lambdaQuery().eq(SysRoleMenuEntity::getMenuId,id).list().stream().count()>0;
@@ -41,8 +44,10 @@ public class SysRoleMenuEntityServiceImpl extends ServiceImpl<SysRoleMenuEntityM
     @Transactional(rollbackFor = Exception.class)
     public void authorizedMenu(AuthorizedSysRoleMenuForm form) {
         List<SysRoleMenuEntity> list = this.lambdaQuery().eq(SysRoleMenuEntity::getRoleId, form.getRoleId()).list();
+        Set<String> oldMenuIds = null;
         if(CollUtil.isNotEmpty(list)){
-            this.getBaseMapper().deleteBatchIds(list.stream().map(SysRoleMenuEntity::getId).collect(Collectors.toSet()));
+            oldMenuIds = list.stream().map(SysRoleMenuEntity::getId).collect(Collectors.toSet());
+            this.getBaseMapper().deleteBatchIds(oldMenuIds);
         }
         // 对前端传递参数进行去重
         Set<String> menuIds = Sets.newHashSet();
@@ -59,12 +64,15 @@ public class SysRoleMenuEntityServiceImpl extends ServiceImpl<SysRoleMenuEntityM
             roleMenuEntities.add(roleMenuEntity);
         });
         this.saveBatch(roleMenuEntities);
+        // 写入缓存
+        if(CollUtil.isNotEmpty(oldMenuIds)){
+            sysRoleMenuCacheService.removeRoleMenuIds(form.getRoleId(),oldMenuIds);
+        }
+        sysRoleMenuCacheService.writeRoleMenuIdsCache(form.getRoleId(),menuIds);
     }
 
     @Override
-    public List<String> getMenuIdsByRoleId(String roleId) {
-        return this.lambdaQuery().eq(SysRoleMenuEntity::getRoleId,roleId)
-                .list().stream().map(SysRoleMenuEntity::getMenuId)
-                .collect(Collectors.toList());
+    public Set<String> getMenuIdsByRoleId(String roleId) {
+        return sysRoleMenuCacheService.readRoleMenuIdsCache(roleId);
     }
 }

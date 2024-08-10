@@ -5,6 +5,7 @@ import com.snake.admin.model.system.entity.SysRoleMenuEntity;
 import com.snake.admin.model.system.form.AuthorizedSysRoleMenuForm;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: snake
@@ -22,5 +23,5 @@ public interface SysRoleMenuEntityService extends IService<SysRoleMenuEntity> {
 
     void authorizedMenu(AuthorizedSysRoleMenuForm form);
 
-    List<String> getMenuIdsByRoleId(String roleId);
+    Set<String> getMenuIdsByRoleId(String roleId);
 }

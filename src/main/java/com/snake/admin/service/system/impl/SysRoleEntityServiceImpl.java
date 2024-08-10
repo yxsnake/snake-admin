@@ -1,11 +1,14 @@
 package com.snake.admin.service.system.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.snake.admin.cache.system.SysRoleCacheService;
+import com.snake.admin.cache.system.SysUserRoleCacheService;
 import com.snake.admin.common.enums.SysRoleStatusEnum;
 import com.snake.admin.mapper.system.SysRoleEntityMapper;
 import com.snake.admin.model.system.dto.SysRoleDTO;
@@ -27,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,6 +39,10 @@ import java.util.stream.Collectors;
 public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, SysRoleEntity> implements SysRoleEntityService {
 
     private final SysUserRoleEntityService sysUserRoleEntityService;
+
+    private final SysRoleCacheService sysRoleCacheService;
+
+    private final SysUserRoleCacheService sysUserRoleCacheService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -46,6 +54,7 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
             sysRoleEntity.setStatus(SysRoleStatusEnum.NORMAL.getValue());
         }
         this.save(sysRoleEntity);
+        sysRoleCacheService.writeRoleToCache(sysRoleEntity);
     }
 
     @Override
@@ -56,10 +65,17 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
         BizAssert.isTrue("角色信息不存在",Objects.isNull(sysRoleEntity));
         BeanUtils.copyProperties(form,sysRoleEntity);
         this.getBaseMapper().updateById(sysRoleEntity);
+        // 写入缓存
+        SysRoleEntity roleEntity = this.getBaseMapper().selectById(id);
+        sysRoleCacheService.writeRoleToCache(roleEntity);
     }
 
     @Override
     public SysRoleDTO detail(String id) {
+        SysRoleEntity roleEntity = sysRoleCacheService.readRoleFormCache(id);
+        if(Objects.nonNull(roleEntity)){
+            return roleEntity.convert(SysRoleDTO.class);
+        }
         SysRoleEntity sysRoleEntity = this.getBaseMapper().selectById(id);
         if(Objects.isNull(sysRoleEntity)){
             return null;
@@ -90,6 +106,7 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
         BizAssert.isTrue("角色不存在",Objects.isNull(sysRoleEntity));
         BizAssert.isTrue("管理员角色不允许删除",SysRoleEntity.ROLE_CODE_ADMIN.equals(sysRoleEntity.getCode()));
         this.getBaseMapper().deleteById(id);
+        sysRoleCacheService.removeRoleCache(id);
     }
 
     @Override
@@ -100,13 +117,30 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
         BizAssert.isTrue("角色信息不存在", Objects.isNull(sysRoleEntity));
         sysRoleEntity.setStatus(form.getStatus());
         this.getBaseMapper().updateById(sysRoleEntity);
+        SysRoleEntity roleEntity = this.getBaseMapper().selectById(id);
+        sysRoleCacheService.writeRoleToCache(roleEntity);
     }
 
     @Override
     public List<SysRoleDTO> getAllRoleList() {
+        List<SysRoleEntity> roles = sysRoleCacheService.getAllRoleList();
+        if(CollUtil.isNotEmpty(roles)){
+            return roles.stream().map(sysRoleEntity -> sysRoleEntity.convert(SysRoleDTO.class)).collect(Collectors.toList());
+        }
         return this.lambdaQuery().list()
                 .stream()
                 .map(sysRoleEntity -> sysRoleEntity.convert(SysRoleDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 当前用户是否包含 超级管理员角色
+     * @param userId
+     * @return
+     */
+    public Boolean containsAdminRole(String userId) {
+        Set<String> roleIds = sysUserRoleCacheService.readUserRoles(userId);
+        List<SysRoleEntity> sysRoleEntities = sysRoleCacheService.readRoleFormCache(roleIds);
+        return sysRoleEntities.stream().filter(sysRoleEntity -> SysRoleEntity.ROLE_CODE_ADMIN.equals(sysRoleEntity.getCode())).count()>0;
     }
 }
