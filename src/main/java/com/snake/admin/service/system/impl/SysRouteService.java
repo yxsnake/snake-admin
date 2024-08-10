@@ -1,6 +1,7 @@
 package com.snake.admin.service.system.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.snake.admin.cache.system.*;
@@ -158,8 +159,10 @@ public class SysRouteService {
             roleCodeList.add(SysRoleEntity.ROLE_CODE_ADMIN);
         }else{
             Set<String> roleIds = sysMenuRoleCacheService.readMenuRoleIdsCache(menuId);
-            List<SysRoleEntity> sysRoleEntities = sysRoleCacheService.readRoleFormCache(roleIds);
-            roleCodeList = sysRoleEntities.stream().map(SysRoleEntity::getCode).collect(Collectors.toSet());
+            if(CollUtil.isNotEmpty(roleIds)){
+                List<SysRoleEntity> sysRoleEntities = sysRoleCacheService.readRoleFormCache(roleIds);
+                roleCodeList = sysRoleEntities.stream().map(SysRoleEntity::getCode).collect(Collectors.toSet());
+            }
         }
         meta.setRoles(roleCodeList);
 
@@ -200,8 +203,10 @@ public class SysRouteService {
             roleCodeList.add(SysRoleEntity.ROLE_CODE_ADMIN);
         }else{
             Set<String> roleIds = sysMenuRoleCacheService.readMenuRoleIdsCache(menuId);
-            List<SysRoleEntity> sysRoleEntities = sysRoleCacheService.readRoleFormCache(roleIds);
-            roleCodeList = sysRoleEntities.stream().map(SysRoleEntity::getCode).collect(Collectors.toSet());
+            if(CollUtil.isNotEmpty(roleIds)){
+                List<SysRoleEntity> sysRoleEntities = sysRoleCacheService.readRoleFormCache(roleIds);
+                roleCodeList = sysRoleEntities.stream().map(SysRoleEntity::getCode).collect(Collectors.toSet());
+            }
         }
 
         meta.setRoles(roleCodeList);
