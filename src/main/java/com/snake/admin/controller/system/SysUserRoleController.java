@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Tag(name = "运营平台-用户分配角色")
 @Slf4j
@@ -34,7 +34,7 @@ public class SysUserRoleController extends BaseController {
 
     @Operation(summary = "获取当前用户的所有角色ID")
     @GetMapping(value = "/list-role-ids/{userId}")
-    public ResponseEntity<Result<List<String>>> getRoleIdsByUserId(@PathVariable("userId") String userId){
+    public ResponseEntity<Result<Set<String>>> getRoleIdsByUserId(@PathVariable("userId") String userId){
         return success(sysUserRoleEntityService.getRoleIdsByUserId(userId));
     }
 

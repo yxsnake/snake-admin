@@ -38,7 +38,7 @@ public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
         String userId = String.valueOf(loginId);
-        Set<String> currentUserRoles = sysUserRoleEntityService.getCurrentUserRoles(userId);
+        Set<String> currentUserRoles = sysUserRoleEntityService.getCurrentUserRoleCodes(userId);
         List<String> roles = Lists.newArrayList();
         if(CollUtil.isNotEmpty(currentUserRoles)){
             roles.addAll(currentUserRoles);

@@ -1,12 +1,13 @@
 package com.snake.admin.service.system.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.snake.admin.cache.system.SysMenuCacheService;
-import com.snake.admin.cache.system.SysRoleMenuCacheService;
-import com.snake.admin.cache.system.SysUserRoleCacheService;
 import com.snake.admin.common.enums.SysMenuTypeEnum;
 import com.snake.admin.mapper.system.SysMenuEntityMapper;
 import com.snake.admin.model.system.dto.SysMenuDTO;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,10 +36,6 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
     private final SysRoleMenuEntityService sysRoleMenuEntityService;
 
     private final SysMenuCacheService sysMenuCacheService;
-
-    private final SysUserRoleCacheService sysUserRoleCacheService;
-
-    private final SysRoleMenuCacheService sysRoleMenuCacheService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -139,10 +137,7 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
             }
             return this.list();
         }else{
-            Set<String> roleIds = sysUserRoleCacheService.readUserRoles(userId);
-            Set<String> menuIds = sysRoleMenuCacheService.readRoleMenuIdsCache(roleIds);
-            List<SysMenuEntity> sysMenuEntities = sysMenuCacheService.readMenuFormCache(menuIds);
-            return sysMenuEntities;
+            return this.getBaseMapper().selectMenuListByUserId(userId);
         }
     }
 
@@ -178,7 +173,4 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         form.setParentId(parentId);
         return form;
     }
-
-
-
 }

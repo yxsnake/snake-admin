@@ -73,7 +73,7 @@ public class LoginService {
         loginSysUser.setRefreshToken(refreshToken);
 
         // 查询当前用的角色标识
-        Set<String> roleCodes =  sysUserRoleEntityService.getCurrentUserRoles(userId);
+        Set<String> roleCodes =  sysUserRoleEntityService.getCurrentUserRoleCodes(userId);
         loginSysUser.setRoles(roleCodes);
         loginSysUser.setAvatar(sysUserEntity.getAvatar());
         loginSysUser.setUsername(sysUserEntity.getUsername());

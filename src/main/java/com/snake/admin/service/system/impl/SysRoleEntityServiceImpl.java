@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.snake.admin.cache.system.SysRoleCacheService;
-import com.snake.admin.cache.system.SysUserRoleCacheService;
 import com.snake.admin.common.enums.SysRoleStatusEnum;
 import com.snake.admin.mapper.system.SysRoleEntityMapper;
 import com.snake.admin.model.system.dto.SysRoleDTO;
@@ -41,8 +40,6 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
     private final SysUserRoleEntityService sysUserRoleEntityService;
 
     private final SysRoleCacheService sysRoleCacheService;
-
-    private final SysUserRoleCacheService sysUserRoleCacheService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -139,8 +136,6 @@ public class SysRoleEntityServiceImpl extends ServiceImpl<SysRoleEntityMapper, S
      * @return
      */
     public Boolean containsAdminRole(String userId) {
-        Set<String> roleIds = sysUserRoleCacheService.readUserRoles(userId);
-        List<SysRoleEntity> sysRoleEntities = sysRoleCacheService.readRoleFormCache(roleIds);
-        return sysRoleEntities.stream().filter(sysRoleEntity -> SysRoleEntity.ROLE_CODE_ADMIN.equals(sysRoleEntity.getCode())).count()>0;
+        return sysUserRoleEntityService.containsAdminRole(userId);
     }
 }

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.snake.admin.cache.system.SysUserRoleCacheService;
 import com.snake.admin.common.enums.SysRoleStatusEnum;
 import com.snake.admin.mapper.system.SysRoleEntityMapper;
 import com.snake.admin.mapper.system.SysUserRoleEntityMapper;
@@ -19,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,11 +26,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityMapper, SysUserRoleEntity> implements SysUserRoleEntityService {
+public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityMapper, SysUserRoleEntity>
+        implements SysUserRoleEntityService {
 
     private final SysRoleEntityMapper sysRoleEntityMapper;
-
-    private final SysUserRoleCacheService sysUserRoleCacheService;
 
     @Override
     public Boolean existRoleBindUser(String id) {
@@ -40,7 +39,7 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
     }
 
     @Override
-    public Set<String> getCurrentUserRoles(String userId) {
+    public Set<String> getCurrentUserRoleCodes(String userId) {
         Set<String> roleIds = this.lambdaQuery().eq(SysUserRoleEntity::getUserId, userId)
                 .list().stream().map(SysUserRoleEntity::getRoleId).collect(Collectors.toSet());
         if(CollUtil.isEmpty(roleIds)){
@@ -82,10 +81,6 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
             this.getBaseMapper().deleteBatchIds(sysUserRoleEntities.stream().map(SysUserRoleEntity::getId).collect(Collectors.toList()));
         }
         this.saveBatch(userRoleEntities);
-        if(CollUtil.isNotEmpty(oldRoleIds)){
-            sysUserRoleCacheService.removeUserRole(form.getUserId(),oldRoleIds);
-        }
-        sysUserRoleCacheService.writeUserRoleIdCache(form.getUserId(),roleIds);
     }
 
     /**
@@ -112,22 +107,16 @@ public class SysUserRoleEntityServiceImpl extends ServiceImpl<SysUserRoleEntityM
     }
 
     @Override
-    public List<String> getRoleIdsByUserId(String userId) {
-        Boolean containsAdminRole = this.containsAdminRole(userId);
-        if(containsAdminRole){
-            return sysRoleEntityMapper.selectList(
-                    Wrappers.lambdaQuery(SysRoleEntity.class)
-                            .eq(SysRoleEntity::getCode,SysRoleEntity.ROLE_CODE_ADMIN)
-                    )
-                    .stream()
-                    .map(SysRoleEntity::getId)
-                    .collect(Collectors.toList());
+    public Set<String> getRoleIdsByUserId(String userId) {
+        Boolean adminRole = this.containsAdminRole(userId);
+        if(adminRole){
+            return Sets.newHashSet(SysRoleEntity.ROLE_CODE_ADMIN);
         }else{
             return this.lambdaQuery().eq(SysUserRoleEntity::getUserId,userId)
                     .list()
                     .stream()
                     .map(SysUserRoleEntity::getRoleId)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
         }
     }
 }
