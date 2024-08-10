@@ -95,7 +95,7 @@ public class SysRouteService {
         SysMenuTypeEnum menuTypeEnum = SysMenuTypeEnum.getInstance(menuType);
         Route router = null;
         switch (menuTypeEnum){
-            case DIR -> router = entityToDir(menuEntity);
+            case DIR -> router = entityToDir(menuEntity,adminRole);
             case MENU -> router = entityToMenu(menuEntity,adminRole);
             case IFRAME -> router = entityToIFrame(menuEntity,adminRole);
             case LINK -> router = entityToLink(menuEntity,adminRole);
@@ -111,7 +111,7 @@ public class SysRouteService {
      * @param menuEntity
      * @return
      */
-    private Route entityToDir(SysMenuEntity menuEntity) {
+    private Route entityToDir(SysMenuEntity menuEntity,Boolean adminRole) {
         String menuId = menuEntity.getId();
         Integer menuType = menuEntity.getMenuType();
 
@@ -126,6 +126,19 @@ public class SysRouteService {
         meta.setIcon(menuEntity.getIcon());
         meta.setTitle(menuEntity.getTitle());
         meta.setRank(menuEntity.getRank());
+
+        Set<String> roleCodeList = Sets.newHashSet();
+        // 如果是系统管理员角色
+        if(adminRole){
+            roleCodeList.add(SysRoleEntity.ROLE_CODE_ADMIN);
+        }else{
+            Set<String> roleIds = sysMenuRoleCacheService.readMenuRoleIdsCache(menuId);
+            if(CollUtil.isNotEmpty(roleIds)){
+                List<SysRoleEntity> sysRoleEntities = sysRoleCacheService.readRoleFormCache(roleIds);
+                roleCodeList = sysRoleEntities.stream().map(SysRoleEntity::getCode).collect(Collectors.toSet());
+            }
+        }
+        meta.setRoles(roleCodeList);
 
         route.setMeta(meta);
         return route;
