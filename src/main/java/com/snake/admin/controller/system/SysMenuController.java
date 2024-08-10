@@ -1,9 +1,7 @@
 package com.snake.admin.controller.system;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.dto.Route;
-import com.snake.admin.model.system.dto.RouteMenuDTO;
 import com.snake.admin.model.system.dto.SysMenuDTO;
 import com.snake.admin.model.system.form.CreateSysMenuForm;
 import com.snake.admin.model.system.form.ModifySysMenuForm;

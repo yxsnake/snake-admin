@@ -1,7 +1,6 @@
 package com.snake.admin.service.system;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.snake.admin.model.system.dto.RouteMenuDTO;
 import com.snake.admin.model.system.dto.SysMenuDTO;
 import com.snake.admin.model.system.entity.SysMenuEntity;
 import com.snake.admin.model.system.form.CreateSysMenuForm;
