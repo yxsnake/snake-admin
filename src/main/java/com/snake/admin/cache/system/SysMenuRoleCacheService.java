@@ -9,6 +9,7 @@ import com.google.common.collect.Sets;
 import com.snake.admin.common.Cons;
 import com.snake.admin.mapper.system.SysRoleMenuEntityMapper;
 import com.snake.admin.model.system.entity.SysRoleMenuEntity;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,6 +30,7 @@ public class SysMenuRoleCacheService {
 
     private final RedisTemplate redisTemplate;
 
+    @PostConstruct
     public void init(){
         log.info("=============================> 开始初始化菜单与角色关系 <============================================");
         Map<String, Set<String>> menuRoleIdsMap = queryMenuRoleIdsMap();
