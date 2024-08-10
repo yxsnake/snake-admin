@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Schema(name = "重置密码")
-public class RestUsrPwdForm {
+public class RestUserPwdForm {
 
     @Schema(description = "重置用户账号")
     @NotBlank(message = "账号不能为空")

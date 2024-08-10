@@ -24,7 +24,7 @@ import com.snake.admin.model.system.entity.SysUserRoleEntity;
 import com.snake.admin.model.system.equal.QuerySysUserEqual;
 import com.snake.admin.model.system.form.CreateSysUserForm;
 import com.snake.admin.model.system.form.ModifySysUserForm;
-import com.snake.admin.model.system.form.RestUsrPwdForm;
+import com.snake.admin.model.system.form.RestUserPwdForm;
 import com.snake.admin.model.system.form.UpdateSysUserStatusForm;
 import com.snake.admin.model.system.fuzzy.QuerySysUserFuzzy;
 import com.snake.admin.service.system.SysDeptEntityService;
@@ -146,7 +146,7 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void restPassword(RestUsrPwdForm form) {
+    public void restPassword(RestUserPwdForm form) {
         SysUserEntity sysUserEntity = this.getBaseMapper().selectById(form.getUserId());
         BizAssert.isTrue("用户不存在",Objects.isNull(sysUserEntity));
         BizAssert.isTrue("超管账号密码不允许重置",SysUserEntity.SUPPER_ACCOUNT.equals(sysUserEntity.getUsername()));

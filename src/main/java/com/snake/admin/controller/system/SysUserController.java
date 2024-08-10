@@ -6,7 +6,7 @@ import com.snake.admin.model.system.dto.SysUserDTO;
 import com.snake.admin.model.system.equal.QuerySysUserEqual;
 import com.snake.admin.model.system.form.CreateSysUserForm;
 import com.snake.admin.model.system.form.ModifySysUserForm;
-import com.snake.admin.model.system.form.RestUsrPwdForm;
+import com.snake.admin.model.system.form.RestUserPwdForm;
 import com.snake.admin.model.system.form.UpdateSysUserStatusForm;
 import com.snake.admin.model.system.fuzzy.QuerySysUserFuzzy;
 import com.snake.admin.service.system.SysUserEntityService;
@@ -66,7 +66,7 @@ public class SysUserController extends BaseController {
 
     @Operation(summary = "重置用户密码")
     @PostMapping(value = "/rest-password",headers = Cons.HEADER_AUTHORIZATION)
-    public ResponseEntity<Result<Boolean>> restPassword(@Validated @RequestBody RestUsrPwdForm form){
+    public ResponseEntity<Result<Boolean>> restPassword(@Validated @RequestBody RestUserPwdForm form){
         sysUserEntityService.restPassword(form);
         return success(Boolean.TRUE);
     }
