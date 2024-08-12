@@ -30,6 +30,6 @@ public class RouteMeta {
 
     private String frameSrc;
 
-    private Boolean keepAlive;
+    private Boolean keepAlive = false;
 
 }
