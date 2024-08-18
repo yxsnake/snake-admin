@@ -155,17 +155,20 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         List<SysMenuEntity> allMenuList = sysMenuCacheService.getAllMenuList();
         List<SysMenuEntity> sysMenuEntities = allMenuList.stream().filter(menu -> SysMenuTypeEnum.MENU.getValue().equals(menu.getMenuType())).collect(Collectors.toList());
         sysMenuEntities.stream().forEach(menu->{
-            menuSubButtonPermsMap.put(menu.getId(),Sets.newHashSet());
+            menuSubButtonPermsMap.put(menu.getId(),Sets.newHashSet(menu.getAuths()));
         });
 
         for (Map.Entry<String, Set<String>> entry : menuSubButtonPermsMap.entrySet()) {
             String menuId = entry.getKey();
+            Set<String> auths = entry.getValue();
             Set<String> perms = allMenuList.stream()
                     .filter(menu -> menuId.equals(menu.getParentId())).map(SysMenuEntity::getAuths)
                     .collect(Collectors.toSet());
             if(CollUtil.isNotEmpty(perms)){
-                menuSubButtonPermsMap.put(menuId,perms);
+                auths.addAll(perms);
+                menuSubButtonPermsMap.put(menuId,auths);
             }
+
         }
         return menuSubButtonPermsMap;
     }
