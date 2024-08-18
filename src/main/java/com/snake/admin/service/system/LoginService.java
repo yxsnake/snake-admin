@@ -1,8 +1,10 @@
 package com.snake.admin.service.system;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.Sets;
 import com.snake.admin.common.components.RefreshTokenService;
 import com.snake.admin.common.enums.BusinessResultCode;
 import com.snake.admin.common.enums.SysUserStatusEnum;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,9 +32,9 @@ public class LoginService {
 
     private final SysUserEntityService sysUserEntityService;
 
-    private final SysUserRoleEntityService sysUserRoleEntityService;
-
     private final RefreshTokenService refreshTokenService;
+
+    private final SysUserPermissionService sysUserPermissionService;
 
 
     public LoginSysUserDTO login(LoginSysUserForm form) {
@@ -73,8 +76,16 @@ public class LoginService {
         loginSysUser.setRefreshToken(refreshToken);
 
         // 查询当前用的角色标识
+        SysUserRoleEntityService sysUserRoleEntityService = sysUserPermissionService.sysUserRoleEntityService();
         Set<String> roleCodes =  sysUserRoleEntityService.getCurrentUserRoleCodes(userId);
         loginSysUser.setRoles(roleCodes);
+
+        List<String> permissionList = sysUserPermissionService.getPermissionList(userId);
+        Set<String> auths = Sets.newHashSet();
+        if(CollUtil.isNotEmpty(permissionList)){
+            auths.addAll(permissionList);
+        }
+        loginSysUser.setAuths(auths);
         loginSysUser.setAvatar(sysUserEntity.getAvatar());
         loginSysUser.setUsername(sysUserEntity.getUsername());
         loginSysUser.setName(sysUserEntity.getNickname());

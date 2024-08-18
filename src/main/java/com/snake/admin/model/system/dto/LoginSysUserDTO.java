@@ -43,4 +43,7 @@ public class LoginSysUserDTO {
 
     @Schema(description = "拥有的角色标识集合")
     private Set<String> roles;
+
+    @Schema(description = "拥有的权限标识集合")
+    private Set<String> auths;
 }

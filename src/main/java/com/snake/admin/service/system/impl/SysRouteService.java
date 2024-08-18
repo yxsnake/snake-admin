@@ -189,6 +189,8 @@ public class SysRouteService {
         meta.setShowLink(menuEntity.getShowLink());
 
         Set<String> roleCodeList = Sets.newHashSet();
+        Set<String> authList = Sets.newHashSet(menuEntity.getAuths());
+        meta.setAuths(authList);
         // 如果是系统管理员角色
         if(adminRole){
             roleCodeList.add(SysRoleEntity.ROLE_CODE_ADMIN);

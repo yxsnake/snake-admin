@@ -14,15 +14,15 @@ import java.util.Objects;
  */
 @Getter
 public enum SysMenuTypeEnum implements IBaseEnum<Integer> {
-    DIR(99,"目录"),
+    DIR(0,"目录"),
 
-    MENU(0,"菜单"),
+    MENU(1,"菜单"),
 
-    IFRAME(1,"iframe"),
+    IFRAME(2,"iframe"),
 
-    LINK(2,"外链"),
+    LINK(3,"外链"),
 
-    BUTTON(3,"按钮")
+    BUTTON(4,"按钮")
     ;
 
     private final Integer value;
