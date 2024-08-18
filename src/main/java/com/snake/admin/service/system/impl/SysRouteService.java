@@ -2,7 +2,6 @@ package com.snake.admin.service.system.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.snake.admin.cache.system.*;
@@ -16,6 +15,7 @@ import com.snake.admin.service.system.SysRoleEntityService;
 import com.snake.admin.service.system.SysRoleMenuEntityService;
 import com.snake.admin.service.system.SysUserRoleEntityService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SysRouteService {
@@ -66,7 +66,8 @@ public class SysRouteService {
         }
         // 根据角色查询菜单ID集合
         if(adminRole){
-            menuIds = sysMenuCacheService.getAllMenuList().stream().map(SysMenuEntity::getId).collect(Collectors.toSet());
+            menuIds = sysMenuCacheService.getAllMenuList().stream()
+                    .map(SysMenuEntity::getId).collect(Collectors.toSet());
         }else{
             menuIds = Sets.newHashSet();
             if(CollUtil.isNotEmpty(roleIds)){
@@ -83,6 +84,7 @@ public class SysRouteService {
         if(CollUtil.isEmpty(sysMenuEntities)){
             return null;
         }
+        sysMenuEntities = sysMenuEntities.stream().filter(menu->!SysMenuTypeEnum.BUTTON.getValue().equals(menu.getMenuType())).collect(Collectors.toList());
         List<Route> list = sysMenuEntities.stream()
                 .map(sysMenuEntity -> menuToRoute(sysMenuEntity, menuIdMappingRoleIdsMap,adminRole))
                 .collect(Collectors.toList());
@@ -100,7 +102,7 @@ public class SysRouteService {
      */
     private List<Route> streamToTree(List<Route> routes, String parentId) {
         List<Route> list = routes.stream()
-                .filter(item -> item.getParentId().equals(parentId))
+                .filter(item -> parentId.equals(item.getParentId()))
                 .collect(Collectors.toList());
 
         list = list.stream().map(item->{
@@ -119,7 +121,7 @@ public class SysRouteService {
             case MENU -> router = entityToMenu(menuEntity,menuIdMappingRoleIdsMap,adminRole);
             case IFRAME -> router = entityToIFrame(menuEntity,menuIdMappingRoleIdsMap,adminRole);
             case LINK -> router = entityToLink(menuEntity,menuIdMappingRoleIdsMap,adminRole);
-            case BUTTON -> router = entityToButton(menuEntity,menuIdMappingRoleIdsMap,adminRole);
+//            case BUTTON -> router = entityToButton(menuEntity,menuIdMappingRoleIdsMap,adminRole);
             default -> router = defaultConvert(menuEntity);
         }
         return router;
@@ -298,8 +300,26 @@ public class SysRouteService {
      * @return
      */
     private Route entityToButton(SysMenuEntity menuEntity,Map<String, Set<String>> menuIdMappingRoleIdsMap,Boolean adminRole) {
-        //TODO
-        return null;
+        String menuId = menuEntity.getId();
+        Integer menuType = menuEntity.getMenuType();
+        Route route = new Route();
+        route.setId(menuId);
+        route.setParentId(menuEntity.getParentId());
+        route.setMenuType(menuType);
+        route.setName(menuEntity.getName());
+        route.setPath(menuEntity.getPath());
+
+
+        RouteMeta meta = new RouteMeta();
+        meta.setIcon(menuEntity.getIcon());
+        meta.setTitle(menuEntity.getTitle());
+        meta.setRank(menuEntity.getRank());
+        meta.setShowLink(menuEntity.getShowLink());
+        meta.setAuths(Sets.newHashSet(menuEntity.getAuths()));
+
+        route.setMeta(meta);
+
+        return route;
     }
 
     private Route defaultConvert(SysMenuEntity menuEntity) {
