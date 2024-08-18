@@ -149,6 +149,27 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Map<String, Set<String>> getMenuSubButtonPermsMap() {
+        Map<String, Set<String>> menuSubButtonPermsMap = Maps.newHashMap();
+        List<SysMenuEntity> allMenuList = sysMenuCacheService.getAllMenuList();
+        List<SysMenuEntity> sysMenuEntities = allMenuList.stream().filter(menu -> SysMenuTypeEnum.MENU.getValue().equals(menu.getMenuType())).collect(Collectors.toList());
+        sysMenuEntities.stream().forEach(menu->{
+            menuSubButtonPermsMap.put(menu.getId(),Sets.newHashSet());
+        });
+
+        for (Map.Entry<String, Set<String>> entry : menuSubButtonPermsMap.entrySet()) {
+            String menuId = entry.getKey();
+            Set<String> perms = allMenuList.stream()
+                    .filter(menu -> menuId.equals(menu.getParentId())).map(SysMenuEntity::getAuths)
+                    .collect(Collectors.toSet());
+            if(CollUtil.isNotEmpty(perms)){
+                menuSubButtonPermsMap.put(menuId,perms);
+            }
+        }
+        return menuSubButtonPermsMap;
+    }
+
     /////////////////////////////////////////////////以下为私有方法 为当前bean 内部使用 //////////////////////////////////////////////////
 
 

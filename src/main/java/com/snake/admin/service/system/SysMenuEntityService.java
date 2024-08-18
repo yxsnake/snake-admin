@@ -7,6 +7,8 @@ import com.snake.admin.model.system.form.CreateSysMenuForm;
 import com.snake.admin.model.system.form.ModifySysMenuForm;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface SysMenuEntityService extends IService<SysMenuEntity> {
 
@@ -21,4 +23,6 @@ public interface SysMenuEntityService extends IService<SysMenuEntity> {
     List<SysMenuEntity> getMenuListByUserId(String userId,Boolean containsAdminRole);
 
     List<SysMenuDTO> queryList();
+
+    Map<String, Set<String>> getMenuSubButtonPermsMap();
 }
