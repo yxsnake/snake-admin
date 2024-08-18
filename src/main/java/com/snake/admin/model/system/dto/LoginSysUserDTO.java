@@ -39,6 +39,8 @@ public class LoginSysUserDTO {
     @Schema(description = "账号")
     private String username;
 
+    private String nickname;
+
     @Schema(description = "拥有的角色标识集合")
     private Set<String> roles;
 }

@@ -80,6 +80,7 @@ public class LoginService {
         loginSysUser.setName(sysUserEntity.getNickname());
         loginSysUser.setGender(sysUserEntity.getSex());
         loginSysUser.setStatus(sysUserEntity.getStatus());
+        loginSysUser.setNickname(sysUserEntity.getNickname());
         return loginSysUser;
     }
 
