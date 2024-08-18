@@ -146,6 +146,7 @@ public class SysRouteService {
         meta.setIcon(menuEntity.getIcon());
         meta.setTitle(menuEntity.getTitle());
         meta.setRank(menuEntity.getRank());
+        meta.setShowLink(menuEntity.getShowLink());
 
         Set<String> roleCodeList = Sets.newHashSet();
         // 如果是系统管理员角色
@@ -185,6 +186,7 @@ public class SysRouteService {
         meta.setIcon(menuEntity.getIcon());
         meta.setTitle(menuEntity.getTitle());
         meta.setRank(menuEntity.getRank());
+        meta.setShowLink(menuEntity.getShowLink());
 
         Set<String> roleCodeList = Sets.newHashSet();
         // 如果是系统管理员角色
@@ -225,6 +227,7 @@ public class SysRouteService {
         meta.setIcon(menuEntity.getIcon());
         meta.setTitle(menuEntity.getTitle());
         meta.setRank(menuEntity.getRank());
+        meta.setShowLink(menuEntity.getShowLink());
 
 
         meta.setFrameSrc(menuEntity.getFrameSrc());
@@ -268,6 +271,7 @@ public class SysRouteService {
         meta.setIcon(menuEntity.getIcon());
         meta.setTitle(menuEntity.getTitle());
         meta.setRank(menuEntity.getRank());
+        meta.setShowLink(menuEntity.getShowLink());
 
         Set<String> roleCodeList = Sets.newHashSet();
         // 如果是系统管理员角色

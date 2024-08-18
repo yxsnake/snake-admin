@@ -22,7 +22,7 @@ public class RouteMeta {
     @JsonInclude(NON_NULL)
     private Long rank;
 
-    private Boolean showLink = true;
+    private Boolean showLink;
 
     @Schema(description = "当前路由具有权限的角色标识集合")
     private Set<String> roles;
