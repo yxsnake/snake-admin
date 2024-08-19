@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import com.snake.admin.common.enums.SysDeptStatusEnum;
 import com.snake.admin.common.enums.SysUserDeletedEnum;
 import com.snake.admin.common.enums.SysUserStatusEnum;
@@ -38,9 +39,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -133,15 +132,24 @@ public class SysUserEntityServiceImpl extends ServiceImpl<SysUserEntityMapper, S
         QuerySysUserEqual equalsQueries = QueryFilter.getEqualsQueries(QuerySysUserEqual.class, queryFilter.getEqualsQueries());
         BizAssert.isTrue("请选择一个部门",StrUtil.isBlank(equalsQueries.getDeptId()));
         QuerySysUserFuzzy fuzzyQueries = QueryFilter.getFuzzyQueries(QuerySysUserFuzzy.class, queryFilter.getFuzzyQueries());
-        return this.page(new Page<>(queryFilter.getPageNum(),queryFilter.getPageSize()),
+        IPage<SysUserDTO> result = this.page(new Page<>(queryFilter.getPageNum(), queryFilter.getPageSize()),
                 Wrappers.lambdaQuery(SysUserEntity.class)
-                        .ne(SysUserEntity::getUsername,SysUserEntity.SUPPER_ACCOUNT)
-                        .eq(SysUserEntity::getDeptId,equalsQueries.getDeptId())
-                        .eq(SysUserEntity::getDeleted,SysUserDeletedEnum.NORMAL.getValue())
-                        .eq(Objects.nonNull(equalsQueries.getStatus()),SysUserEntity::getStatus,equalsQueries.getStatus())
-                        .like(StrUtil.isNotBlank(fuzzyQueries.getUsername()),SysUserEntity::getUsername,fuzzyQueries.getUsername())
-                        .like(StrUtil.isNotBlank(fuzzyQueries.getPhone()),SysUserEntity::getPhone,fuzzyQueries.getPhone())
-        ).convert(item->item.convert(SysUserDTO.class));
+                        .ne(SysUserEntity::getUsername, SysUserEntity.SUPPER_ACCOUNT)
+                        .eq(SysUserEntity::getDeptId, equalsQueries.getDeptId())
+                        .eq(SysUserEntity::getDeleted, SysUserDeletedEnum.NORMAL.getValue())
+                        .eq(Objects.nonNull(equalsQueries.getStatus()), SysUserEntity::getStatus, equalsQueries.getStatus())
+                        .like(StrUtil.isNotBlank(fuzzyQueries.getUsername()), SysUserEntity::getUsername, fuzzyQueries.getUsername())
+                        .like(StrUtil.isNotBlank(fuzzyQueries.getPhone()), SysUserEntity::getPhone, fuzzyQueries.getPhone())
+        ).convert(item -> item.convert(SysUserDTO.class));
+        Set<String> deptIds = result.getRecords().stream().map(SysUserDTO::getDeptId).collect(Collectors.toSet());
+        Map<String, SysDeptEntity> deptEntityMap = sysDeptEntityService.getBaseMapper().selectBatchIds(deptIds).stream().collect(Collectors.toMap(SysDeptEntity::getId, row -> row));
+        List<SysUserDTO> list = Lists.newArrayList();
+        for (SysUserDTO record : result.getRecords()) {
+            record.setDeptName(Objects.nonNull(deptEntityMap.get(record.getDeptId()))?deptEntityMap.get(record.getDeptId()).getName():"");
+            list.add(record);
+        }
+        result.setRecords(list);
+        return result;
     }
 
     @Override

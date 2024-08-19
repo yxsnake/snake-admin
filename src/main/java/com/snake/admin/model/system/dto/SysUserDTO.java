@@ -39,6 +39,9 @@ public class SysUserDTO {
     @Schema(description = "部门ID")
     private String deptId;
 
+    @Schema(description = "部门名称")
+    private String deptName;
+
     @Schema(description = "角色详细信息")
     private List<SysRoleDTO> roleList;
 
