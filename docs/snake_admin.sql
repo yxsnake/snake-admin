@@ -11,7 +11,7 @@
  Target Server Version : 50744 (5.7.44-log)
  File Encoding         : 65001
 
- Date: 19/08/2024 22:43:00
+ Date: 19/08/2024 23:05:44
 */
 
 SET NAMES utf8mb4;
@@ -94,10 +94,10 @@ CREATE TABLE `sys_menu`  (
 INSERT INTO `sys_menu` VALUES ('1819614103262461953', '0', 0, '系统管理', 'PureSystem', '/system', '', 1, '', 'ri:settings-3-line', '', 'bounce', 'bounce', '', '', '', 0, 0, 0, 0, 1, 0, '2024-08-03 13:59:44', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1819614103262461954', '0', 0, '接口文档', 'ApiDoc', '/snake-admin-doc', NULL, 100, '/snake-admin/pure-admin-doc', 'ri:terminal-window-line', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1819614103262461955', '1819614103262461954', 1, '运营平台接口文档', 'http://101.126.69.31:41000/doc.html', '/external', NULL, 102, NULL, 'fa-solid:ad', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES ('1819614693686534146', '1819614103262461953', 1, '用户管理', 'SystemUser', '/system/user/index', '', 10, '', 'ri:admin-line', '', 'bounce', 'bounce', '', 'sys:user:list', '', 0, 0, 0, 0, 1, 0, '2024-08-03 14:02:04', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES ('1819614933785272321', '1819614103262461953', 1, '角色管理', 'SystemRole', '/system/role/index', '', 11, '', 'ri:admin-fill', '', 'bounce', 'bounce', '', 'sys:role:list', '', 0, 0, 0, 0, 1, 0, '2024-08-03 14:03:02', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES ('1819615102815723521', '1819614103262461953', 1, '菜单管理', 'SystemMenu', '/system/menu/index', '', 12, '', 'ep:menu', '', 'bounce', 'bounce', '', 'sys:menu:list', '', 0, 0, 0, 0, 1, 0, '2024-08-03 14:03:42', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_menu` VALUES ('1819615242922254337', '1819614103262461953', 1, '部门管理', 'SystemDept', '/system/dept/index', '', 13, '', 'ri:git-branch-line', '', 'bounce', 'bounce', '', 'sys:dept:list', '', 0, 0, 0, 0, 1, 0, '2024-08-03 14:04:15', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1819614693686534146', '1819614103262461953', 1, '用户管理', 'SystemUser', '/system/user/index', '', 10, '', 'ri:admin-line', '', 'bounce', 'bounce', '', 'sys:user:view', '', 0, 0, 0, 0, 1, 0, '2024-08-03 14:02:04', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1819614933785272321', '1819614103262461953', 1, '角色管理', 'SystemRole', '/system/role/index', '', 11, '', 'ri:admin-fill', '', 'bounce', 'bounce', '', 'sys:role:view', '', 0, 0, 0, 0, 1, 0, '2024-08-03 14:03:02', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1819615102815723521', '1819614103262461953', 1, '菜单管理', 'SystemMenu', '/system/menu/index', '', 12, '', 'ep:menu', '', 'bounce', 'bounce', '', 'sys:menu:view', '', 0, 0, 0, 0, 1, 0, '2024-08-03 14:03:42', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1819615242922254337', '1819614103262461953', 1, '部门管理', 'SystemDept', '/system/dept/index', '', 13, '', 'ri:git-branch-line', '', 'bounce', 'bounce', '', 'sys:dept:view', '', 0, 0, 0, 0, 1, 0, '2024-08-03 14:04:15', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1820854703098048513', '1819614103262461954', 1, '前端开源框架文档', 'SnakeAdminDoc', '/snake-admin/pure-admin-doc', 'IFrame', 100, '', 'ri:terminal-window-line', '', '', '', '', '', 'https://pure-admin.github.io/pure-admin-doc/pages/introduction/', 1, 0, 0, 0, 1, 1, '2024-08-07 00:09:26', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1825186390862917633', '1819615242922254337', 4, '新增', '', '', '', 99, '', '', '', '', '', '', 'sys:dept:create', '', 1, 0, 0, 0, 1, 0, '2024-08-18 23:02:01', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1825187080800759810', '1819615242922254337', 4, '修改', '', '', '', 99, '', '', '', '', '', '', 'sys:dept:modify', '', 1, 0, 0, 0, 1, 0, '2024-08-18 23:04:45', NULL, NULL, NULL, NULL, NULL);
@@ -111,6 +111,8 @@ INSERT INTO `sys_menu` VALUES ('1825187625447911426', '1819614933785272321', 4, 
 INSERT INTO `sys_menu` VALUES ('1825187726656466945', '1819614693686534146', 4, '新增', '', '', '', 99, '', '', '', '', '', '', 'sys:user:create', '', 1, 0, 0, 0, 1, 0, '2024-08-18 23:07:19', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1825187852569473026', '1819614693686534146', 4, '修改', '', '', '', 99, '', '', '', '', '', '', 'sys:user:modify', '', 1, 0, 0, 0, 1, 0, '2024-08-18 23:07:49', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_menu` VALUES ('1825542934573932545', '1819614933785272321', 4, '权限', '', '', '', 99, '', '', '', '', '', '', 'sys:role:auth', '', 1, 0, 0, 0, 1, 0, '2024-08-19 22:38:47', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1825547739400871938', '1819614693686534146', 4, '分配角色', '', '', '', 99, '', '', '', '', '', '', 'sys:user:auth-role', '', 1, 0, 0, 0, 1, 0, '2024-08-19 22:57:53', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_menu` VALUES ('1825548658637119489', '1819614693686534146', 4, '重置密码', '', '', '', 99, '', '', '', '', '', '', 'sys:user:rest-pwd', '', 1, 0, 0, 0, 1, 0, '2024-08-19 23:01:32', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -158,13 +160,15 @@ CREATE TABLE `sys_role_menu`  (
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES ('1825541962720141314', '1820629320230727681', '1819614103262461953', '2024-08-19 22:34:56', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES ('1825541962720141315', '1820629320230727681', '1819614103262461954', '2024-08-19 22:34:56', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES ('1825541962720141316', '1820629320230727681', '1819614103262461955', '2024-08-19 22:34:56', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES ('1825541962720141317', '1820629320230727681', '1819614933785272321', '2024-08-19 22:34:56', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES ('1825541962720141318', '1820629320230727681', '1819615102815723521', '2024-08-19 22:34:56', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES ('1825541962720141319', '1820629320230727681', '1819615242922254337', '2024-08-19 22:34:56', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES ('1825541962720141320', '1820629320230727681', '1820854703098048513', '2024-08-19 22:34:56', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132098', '1820629320230727681', '1819614103262461953', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132099', '1820629320230727681', '1819614103262461954', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132100', '1820629320230727681', '1819614103262461955', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132101', '1820629320230727681', '1819614693686534146', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132102', '1820629320230727681', '1819614933785272321', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132103', '1820629320230727681', '1819615102815723521', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132104', '1820629320230727681', '1819615242922254337', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132105', '1820629320230727681', '1820854703098048513', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES ('1825549129456132106', '1820629320230727681', '1825187852569473026', '2024-08-19 23:03:24', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user
