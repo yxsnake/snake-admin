@@ -16,6 +16,7 @@ import com.snake.admin.model.system.form.CreateSysMenuForm;
 import com.snake.admin.model.system.form.ModifySysMenuForm;
 import com.snake.admin.service.system.SysMenuEntityService;
 import com.snake.admin.service.system.SysRoleMenuEntityService;
+import com.snake.admin.service.system.SysUserRoleEntityService;
 import io.github.yxsnake.pisces.web.core.utils.BizAssert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,8 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
     private final SysRoleMenuEntityService sysRoleMenuEntityService;
 
     private final SysMenuCacheService sysMenuCacheService;
+
+    private final SysUserRoleEntityService sysUserRoleEntityService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -173,6 +176,39 @@ public class SysMenuEntityServiceImpl extends ServiceImpl<SysMenuEntityMapper, S
         return menuSubButtonPermsMap;
     }
 
+    @Override
+    public List<SysMenuEntity> getCurrentMenuChildren(String menuId) {
+        return this.lambdaQuery().eq(SysMenuEntity::getParentId,menuId).list();
+    }
+
+    @Override
+    public Map<String, String> getPermissionMenuMap(String userId,Boolean adminRole) {
+        Map<String, String> permissionMenuMap = Maps.newHashMap();
+        Set<String> roleIds = null;
+        // 查询当前用户所有角色
+        if(!adminRole){
+            roleIds = sysUserRoleEntityService.getRoleIdsByUserId(userId);
+        }
+        // 根据角色查询到所有菜单
+        Set<String> menuIds = null;
+        List<SysMenuEntity> sysMenuEntities = null;
+        if(!adminRole){
+            menuIds = sysRoleMenuEntityService.getMenuIdsByRoleIds(roleIds);
+            if(CollUtil.isNotEmpty(menuIds)){
+                sysMenuEntities = this.getBaseMapper().selectBatchIds(menuIds);
+            }
+        }else{
+            // 查询所有菜单
+            sysMenuEntities = this.list();
+        }
+        // 获取
+        sysMenuEntities.stream().forEach(sysMenuEntity -> {
+            if(StrUtil.isNotBlank(sysMenuEntity.getAuths())){
+                permissionMenuMap.put(sysMenuEntity.getId(),sysMenuEntity.getAuths());
+            }
+        });
+        return permissionMenuMap;
+    }
     /////////////////////////////////////////////////以下为私有方法 为当前bean 内部使用 //////////////////////////////////////////////////
 
 

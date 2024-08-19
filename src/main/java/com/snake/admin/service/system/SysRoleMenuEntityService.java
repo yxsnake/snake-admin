@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.snake.admin.model.system.entity.SysRoleMenuEntity;
 import com.snake.admin.model.system.form.AuthorizedSysRoleMenuForm;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -24,4 +25,6 @@ public interface SysRoleMenuEntityService extends IService<SysRoleMenuEntity> {
     void authorizedMenu(AuthorizedSysRoleMenuForm form);
 
     Set<String> getMenuIdsByRoleId(String roleId);
+
+    Set<String> getMenuIdsByRoleIds(Collection<String> roleIds);
 }

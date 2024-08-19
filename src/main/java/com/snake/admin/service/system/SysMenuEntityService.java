@@ -25,4 +25,8 @@ public interface SysMenuEntityService extends IService<SysMenuEntity> {
     List<SysMenuDTO> queryList();
 
     Map<String, Set<String>> getMenuSubButtonPermsMap();
+
+    List<SysMenuEntity> getCurrentMenuChildren(String menuId);
+
+    Map<String, String> getPermissionMenuMap(String userId,Boolean adminRole);
 }

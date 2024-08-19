@@ -18,10 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -81,6 +78,16 @@ public class SysRoleMenuEntityServiceImpl extends ServiceImpl<SysRoleMenuEntityM
     public Set<String> getMenuIdsByRoleId(String roleId) {
         return this.lambdaQuery()
                 .eq(SysRoleMenuEntity::getRoleId,roleId)
+                .list()
+                .stream()
+                .map(SysRoleMenuEntity::getMenuId)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<String> getMenuIdsByRoleIds(Collection<String> roleIds) {
+        return this.lambdaQuery()
+                .in(SysRoleMenuEntity::getRoleId,roleIds)
                 .list()
                 .stream()
                 .map(SysRoleMenuEntity::getMenuId)

@@ -3,14 +3,18 @@ package com.snake.admin.service.system.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.snake.admin.model.system.entity.SysMenuEntity;
 import com.snake.admin.service.system.SysMenuEntityService;
+import com.snake.admin.service.system.SysRoleMenuEntityService;
 import com.snake.admin.service.system.SysUserPermissionService;
 import com.snake.admin.service.system.SysUserRoleEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,6 +24,8 @@ public class SysUserPermissionServiceImpl implements SysUserPermissionService {
     private final SysUserRoleEntityService sysUserRoleEntityService;
 
     private final SysMenuEntityService sysMenuEntityService;
+
+    private final SysRoleMenuEntityService sysRoleMenuEntityService;
 
     @Override
     public List<String> getPermissionList(String userId) {

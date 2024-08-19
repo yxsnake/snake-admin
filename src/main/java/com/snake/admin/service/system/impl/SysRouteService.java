@@ -86,10 +86,9 @@ public class SysRouteService {
         if(CollUtil.isEmpty(sysMenuEntities)){
             return null;
         }
-        Map<String, Set<String>> menuPermsMap = sysMenuEntityService.getMenuSubButtonPermsMap();
         sysMenuEntities = sysMenuEntities.stream().filter(menu->!SysMenuTypeEnum.BUTTON.getValue().equals(menu.getMenuType())).collect(Collectors.toList());
         List<Route> list = sysMenuEntities.stream()
-                .map(sysMenuEntity -> menuToRoute(sysMenuEntity,menuPermsMap, menuIdMappingRoleIdsMap,adminRole))
+                .map(sysMenuEntity -> menuToRoute(sysMenuEntity, menuIdMappingRoleIdsMap,adminRole))
                 .collect(Collectors.toList());
         List<Route> routeList = streamToTree(list, SysMenuEntity.ROOT_PARENT);
         return routeList;
@@ -115,13 +114,13 @@ public class SysRouteService {
         return list;
     }
 
-    private Route menuToRoute(SysMenuEntity menuEntity,Map<String, Set<String>> menuPermsMap,Map<String, Set<String>> menuIdMappingRoleIdsMap,Boolean adminRole){
+    private Route menuToRoute(SysMenuEntity menuEntity,Map<String, Set<String>> menuIdMappingRoleIdsMap,Boolean adminRole){
         Integer menuType = menuEntity.getMenuType();
         SysMenuTypeEnum menuTypeEnum = SysMenuTypeEnum.getInstance(menuType);
         Route router = null;
         switch (menuTypeEnum){
             case DIR -> router = entityToDir(menuEntity,menuIdMappingRoleIdsMap,adminRole);
-            case MENU -> router = entityToMenu(menuEntity,menuPermsMap,menuIdMappingRoleIdsMap,adminRole);
+            case MENU -> router = entityToMenu(menuEntity,menuIdMappingRoleIdsMap,adminRole);
             case IFRAME -> router = entityToIFrame(menuEntity,menuIdMappingRoleIdsMap,adminRole);
             case LINK -> router = entityToLink(menuEntity,menuIdMappingRoleIdsMap,adminRole);
 //            case BUTTON -> router = entityToButton(menuEntity,menuIdMappingRoleIdsMap,adminRole);
@@ -176,7 +175,7 @@ public class SysRouteService {
      * @param adminRole
      * @return
      */
-    private Route entityToMenu(SysMenuEntity menuEntity, Map<String, Set<String>> menuPermsMap,Map<String, Set<String>> menuIdMappingRoleIdsMap,Boolean adminRole) {
+    private Route entityToMenu(SysMenuEntity menuEntity,Map<String, Set<String>> menuIdMappingRoleIdsMap,Boolean adminRole) {
         String menuId = menuEntity.getId();
         Integer menuType = menuEntity.getMenuType();
 
@@ -206,7 +205,19 @@ public class SysRouteService {
             }
         }
         meta.setRoles(roleCodeList);
-        meta.setAuths(menuPermsMap.get(menuId));
+
+        // 查询当前菜单的所有子菜单
+        Set<String> auths = Sets.newHashSet();
+        List<SysMenuEntity> children = sysMenuEntityService.getCurrentMenuChildren(menuId);
+        Map<String, String> permissionMenuMap = sysMenuEntityService.getPermissionMenuMap(String.valueOf(StpUtil.getLoginId()),adminRole);
+        for (SysMenuEntity sysMenuEntity : children) {
+            if(permissionMenuMap.containsKey(sysMenuEntity.getId())){
+                auths.add(sysMenuEntity.getAuths());
+            }
+        }
+        auths.add(menuEntity.getAuths());
+
+        meta.setAuths(auths);
         route.setMeta(meta);
         return route;
     }
