@@ -1,5 +1,6 @@
 package com.snake.admin.controller.system;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.form.AuthorizedSysRoleMenuForm;
 import com.snake.admin.service.system.SysRoleMenuEntityService;
@@ -28,6 +29,7 @@ public class SysRoleMenuController extends BaseController {
 
     @Operation(summary = "角色授权菜单按钮")
     @PostMapping(value = "/authorized",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:role:auth")
     public ResponseEntity<Result<Boolean>> authorizedMenu(@Validated @RequestBody AuthorizedSysRoleMenuForm form){
         sysRoleMenuEntityService.authorizedMenu(form);
         return success(Boolean.TRUE);

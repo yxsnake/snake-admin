@@ -1,5 +1,6 @@
 package com.snake.admin.controller.system;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.form.AuthorizedSysUserRoleForm;
 import com.snake.admin.service.system.SysUserRoleEntityService;
@@ -27,6 +28,7 @@ public class SysUserRoleController extends BaseController {
 
     @Operation(summary = "用户授权角色")
     @PostMapping(value = "/authorized",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:user:auth-role")
     public ResponseEntity<Result<Boolean>> authorizedRole(@Validated @RequestBody AuthorizedSysUserRoleForm form){
         sysUserRoleEntityService.authorizedRole(form);
         return success(Boolean.TRUE);

@@ -1,5 +1,6 @@
 package com.snake.admin.controller.system;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.dto.SysRoleDTO;
@@ -34,6 +35,7 @@ public class SysRoleController extends BaseController {
 
     @Operation(summary = "创建角色")
     @PostMapping(value = "/create",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:role:create")
     public ResponseEntity<Result<Boolean>> create(@Validated @RequestBody CreateSysRoleForm form){
         sysRoleEntityService.create(form);
         return success(Boolean.TRUE);
@@ -41,6 +43,7 @@ public class SysRoleController extends BaseController {
 
     @Operation(summary = "修改角色")
     @PostMapping(value = "/modify",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:role:modify")
     public ResponseEntity<Result<Boolean>> modify(@Validated @RequestBody ModifySysRoleForm form){
         sysRoleEntityService.modify(form);
         return success(Boolean.TRUE);
@@ -48,24 +51,28 @@ public class SysRoleController extends BaseController {
 
     @Operation(summary = "查询角色")
     @GetMapping(value = "/detail/{id}",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:role:view")
     public ResponseEntity<Result<SysRoleDTO>> detail(@PathVariable("id") String id){
         return success(sysRoleEntityService.detail(id));
     }
 
     @Operation(summary = "查询角色")
     @GetMapping(value = "/all-role-list",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:role:view")
     public ResponseEntity<Result<List<SysRoleDTO>>> getAllRoleList(){
         return success(sysRoleEntityService.getAllRoleList());
     }
 
     @Operation(summary = "分页查询角色列表")
     @PostMapping(value = "/page-list",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:role:view")
     public ResponseEntity<Result<IPage<SysRoleDTO>>> pageList(@RequestBody QueryFilter<QuerySysRoleEqual, QuerySysRoleFuzzy> queryFilter){
         return success(sysRoleEntityService.pageList(queryFilter));
     }
 
     @Operation(summary = "删除角色")
     @GetMapping(value = "/delete/{id}",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:role:delete")
     public ResponseEntity<Result<Boolean>> deleteById(@PathVariable("id") String id){
         sysRoleEntityService.deleteById(id);
         return success(Boolean.TRUE);

@@ -1,5 +1,6 @@
 package com.snake.admin.controller.system;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.snake.admin.common.Cons;
 import com.snake.admin.model.system.dto.SysUserDTO;
@@ -33,6 +34,7 @@ public class SysUserController extends BaseController {
 
     @Operation(summary = "创建用户")
     @PostMapping(value = "/create",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:user:create")
     public ResponseEntity<Result<Boolean>> create(@Validated @RequestBody CreateSysUserForm form){
         sysUserEntityService.create(form);
         return success(Boolean.TRUE);
@@ -40,6 +42,7 @@ public class SysUserController extends BaseController {
 
     @Operation(summary = "修改用户")
     @PostMapping(value = "/modify",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:user:modify")
     public ResponseEntity<Result<Boolean>> modify(@Validated @RequestBody ModifySysUserForm form){
         sysUserEntityService.modify(form);
         return success(Boolean.TRUE);
@@ -47,12 +50,14 @@ public class SysUserController extends BaseController {
 
     @Operation(summary = "查询用户信息")
     @GetMapping(value = "/detail/{id}",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:user:view")
     public ResponseEntity<Result<SysUserDTO>> detail(@PathVariable("id") String id){
         return success(sysUserEntityService.detail(id));
     }
 
     @Operation(summary = "修改用户状态")
     @PostMapping(value = "/update-status",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:user:modify")
     public ResponseEntity<Result<Boolean>> updateStatus(@Validated @RequestBody UpdateSysUserStatusForm form){
         sysUserEntityService.upateStatus(form);
         return success(Boolean.TRUE);
@@ -60,12 +65,14 @@ public class SysUserController extends BaseController {
 
     @Operation(summary = "分页查询用户列表")
     @PostMapping(value = "/page-list",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:user:view")
     public ResponseEntity<Result<IPage<SysUserDTO>>> pageList(@RequestBody QueryFilter<QuerySysUserEqual, QuerySysUserFuzzy> queryFilter){
         return success(sysUserEntityService.pageList(queryFilter));
     }
 
     @Operation(summary = "重置用户密码")
     @PostMapping(value = "/rest-password",headers = Cons.HEADER_AUTHORIZATION)
+    @SaCheckPermission(value = "sys:user:rest-pwd")
     public ResponseEntity<Result<Boolean>> restPassword(@Validated @RequestBody RestUserPwdForm form){
         sysUserEntityService.restPassword(form);
         return success(Boolean.TRUE);
@@ -73,6 +80,7 @@ public class SysUserController extends BaseController {
 
     @Operation(summary = "批了删除用户")
     @GetMapping(value = "/batchDeleteUser")
+    @SaCheckPermission(value = "sys:user:delete")
     public ResponseEntity<Result<Boolean>> batchDeleteUser(@RequestParam("userIds") String userIds){
         sysUserEntityService.batchDeleteUser(userIds);
         return success(Boolean.TRUE);

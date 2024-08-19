@@ -62,7 +62,7 @@ public class SysDeptController extends BaseController {
 
     @Operation(summary = "查询部门列表")
     @GetMapping(value = "/list",headers = Cons.HEADER_AUTHORIZATION)
-    @SaCheckPermission(value = "sys:dept:list")
+    @SaCheckPermission(value = "sys:dept:view")
     public ResponseEntity<Result<List<SysDeptDTO>>> list(){
 
         return success(sysDeptEntityService.list()
