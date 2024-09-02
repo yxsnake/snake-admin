@@ -20,7 +20,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>com.snake.admin.AdminApplication</start-class>
-        <pisces.version>1.0.4</pisces.version>
+        <pisces.version>2.0.0</pisces.version>
 
         <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
         <swagger-core.version>2.2.20</swagger-core.version>
@@ -41,6 +41,10 @@
         <dependency>
             <groupId>io.github.yxsnake</groupId>
             <artifactId>pisces-redis-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.yxsnake</groupId>
+            <artifactId>pisces-file-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.lianjiatech</groupId>
